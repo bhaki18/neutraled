@@ -59,10 +59,10 @@ export default class Scene4 extends Phaser.Scene {
     }
     preload() {
 
-        this.load.image('player', '/assets/scene3/scene3_player.png');
-        this.load.image('npc', '/assets/scene3/player.png');
-        this.load.image('bullet1', '/assets/scene4/scene4_bullet1.png');
-        this.load.image('player_shield', '/assets/scene4/scene4_player_shield.png');
+        this.load.image('player', 'assets/scene3/scene3_player.png');
+        this.load.image('npc', 'assets/scene3/player.png');
+        this.load.image('bullet1', 'assets/scene4/scene4_bullet1.png');
+        this.load.image('player_shield', 'assets/scene4/scene4_player_shield.png');
     }
 
     create() {
@@ -316,4 +316,5 @@ export default class Scene4 extends Phaser.Scene {
         }
     }
     
+
 }
