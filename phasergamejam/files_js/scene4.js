@@ -58,6 +58,7 @@ export default class Scene4 extends Phaser.Scene {
 
     }
     preload() {
+        this.load.setBaseURL('phasergamejam/');
 
         this.load.image('player', 'assets/scene3/scene3_player.png');
         this.load.image('npc', 'assets/scene3/player.png');
@@ -318,3 +319,4 @@ export default class Scene4 extends Phaser.Scene {
     
 
 }
+
