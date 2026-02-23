@@ -113,6 +113,7 @@ export default class Scene1 extends Phaser.Scene {
         }
 
         this.load.image('title', 'phasergamejam/assets/scene1/scene1_title.png');
+        
     }
 
     create() {
@@ -266,6 +267,7 @@ export default class Scene1 extends Phaser.Scene {
     }
 
 }
+
 
 
 
