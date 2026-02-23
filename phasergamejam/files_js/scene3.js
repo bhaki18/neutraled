@@ -33,11 +33,11 @@ export class Scene3 extends Phaser.Scene {
     }
 
     preload() {
-        this.load.setBaseURL('phasergamejam/');
-        this.load.tilemapTiledJSON('map', 'assets/scene3/tile_map/map.json');
-        this.load.image('tiles', 'assets/scene3/tile_map/spritesheet.png');
-        this.load.image('player', 'assets/scene3/scene3_player.png');
-        this.load.image('npc1', 'assets/scene3/player.png');
+        
+        this.load.tilemapTiledJSON('map', 'phasergamejam/assets/scene3/tile_map/map.json');
+        this.load.image('tiles', 'phasergamejam/assets/scene3/tile_map/spritesheet.png');
+        this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
+        this.load.image('npc1', 'phasergamejam/assets/scene3/player.png');
     }
 
     create() {
@@ -340,4 +340,5 @@ export class Scene3 extends Phaser.Scene {
 
 
 }
+
 
