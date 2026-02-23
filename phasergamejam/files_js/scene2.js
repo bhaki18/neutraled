@@ -75,6 +75,7 @@ export default class Scene2 extends Phaser.Scene {
     }
 
     preload() {
+        this.load.setBaseURL('phasergamejam/');
         this.load.image('space_background_frame1', 'assets/scene2/scene2_space_background_frame1.png');
         this.load.image('space_background_frame2', 'assets/scene2/scene2_space_background_frame2.png');
 
@@ -154,3 +155,4 @@ export default class Scene2 extends Phaser.Scene {
     }
 
 }
+
