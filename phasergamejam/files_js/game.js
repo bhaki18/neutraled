@@ -1,5 +1,6 @@
 
 
+
 import Scene4 from './scene4.js';
 import { Scene3 } from './scene3.js';
 import Scene2 from './scene2.js';
@@ -26,4 +27,5 @@ const config = {
 };
 
 new Phaser.Game(config);
+
 
