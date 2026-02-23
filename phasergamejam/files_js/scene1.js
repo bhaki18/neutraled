@@ -99,6 +99,7 @@ export default class Scene1 extends Phaser.Scene {
     }
 
     preload() {
+        this.load.setBaseURL('phasergamejam/');
         this.load.image('background_sky', 'assets/scene1/scene1_background_sky.png');
 
         for (let i = 1; i <= 10; i++) {
@@ -265,3 +266,4 @@ export default class Scene1 extends Phaser.Scene {
     }
 
 }
+
