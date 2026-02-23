@@ -17,7 +17,7 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: {x:0, y: 0 }, // o 0 se top-down
-            debug: true        // opzionale, utile per vedere collisioni
+            debug: false        // opzionale, utile per vedere collisioni
         }
     },
   width: 800,
@@ -26,3 +26,4 @@ const config = {
 };
 
 new Phaser.Game(config);
+
