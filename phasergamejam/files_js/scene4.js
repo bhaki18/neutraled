@@ -58,7 +58,6 @@ export default class Scene4 extends Phaser.Scene {
 
     }
     preload() {
-        
 
         this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
         this.load.image('npc', 'phasergamejam/assets/scene3/player.png');
@@ -311,13 +310,15 @@ export default class Scene4 extends Phaser.Scene {
             (!this.bullet4 || !this.bullet4.active)
         ) {
             this.time.delayedCall(1000, () => {
-                this.scene.start('Scene3');
-                this.registry.set('tutorial_done', true);
+                this.guide_text.setText('complimenti hai completato il tutorial!\nora esci dal castello e neutralizza quei mostri!');
+                this.time.delayedCall(7000, () => {
+
+                    this.scene.start('Scene3');
+                    this.registry.set('tutorial_done', true);
+                })
+
             });
         }
     }
-    
 
 }
-
-
