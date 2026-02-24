@@ -28,6 +28,10 @@ export class Scene3 extends Phaser.Scene {
             "adesso facciamo pratica"
         ];
 
+        this.dialogueIndex = 0;
+        this.dialogueActive = false;
+        this.enterKey = null;
+
 
 
     }
@@ -66,6 +70,10 @@ export class Scene3 extends Phaser.Scene {
             right: 'D',
             interact: 'ENTER'
         });
+
+        this.enterKey = this.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.ENTER
+        );
 
         // tilemap
         this.map = this.make.tilemap({ key: 'map' });
@@ -167,6 +175,10 @@ export class Scene3 extends Phaser.Scene {
     }
 
     update() {
+
+        if (this.dialogueActive && Phaser.Input.Keyboard.JustDown(this.enterKey)) {
+            this.nextDialogueLine();
+        }
 
 
         let animation_is_playing = false;
@@ -341,82 +353,50 @@ export class Scene3 extends Phaser.Scene {
 
     }
 
+
+
     animation_script() {
+
         this.cameras.main.stopFollow();
 
         this.cameras.main.pan(
             this.npc1.x,
             this.npc1.y,
-            1000,          // durata in millisecondi
+            1000,
             'Sine.easeInOut'
         );
 
-        if (this.is_camera_moving) {
-            this.time.delayedCall(1000, () => {
+        if (!this.is_camera_moving) return;
 
+        this.time.delayedCall(1000, () => {
 
-                this.rect_for_textbox = this.add.rectangle(
-                    this.npc1_x,
-                    this.npc1_y + 100,
-                    300,
-                    50,
-                    0x000000
-                ).setOrigin(0.5).setStrokeStyle(
-                    2,
-                    0xffffff
-                );
+            this.dialogueActive = true;
+            this.dialogueIndex = 0;
 
-                this.guide_text = this.add.text(
-                    this.rect_for_textbox.x,
-                    this.rect_for_textbox.y,
-                    this.guide_text_string[0],
-                    {
-                        fontSize: '20px',         // dimensione iniziale
-                        color: '#ffffff',
-                        align: 'center',
-                        wordWrap: { width: this.rect_for_textbox.width - 20 } // padding interno
-                    }
-                ).setOrigin(0.5);
+            this.rect_for_textbox = this.add.rectangle(
+                this.npc1_x,
+                this.npc1_y + 100,
+                300,
+                50,
+                0x000000
+            ).setOrigin(0.5).setStrokeStyle(2, 0xffffff);
 
-                this.time.delayedCall(5000, () => {
-                    this.guide_text.setText(this.guide_text_string[1]);
-                    this.time.delayedCall(5000, () => {
-                        this.guide_text.setText(this.guide_text_string[2]).setFontSize(14);
-                        this.time.delayedCall(5000, () => {
-                            this.guide_text.setText(this.guide_text_string[3]);
-                            this.time.delayedCall(5000, () => {
-                                this.guide_text.setText(this.guide_text_string[4]);
-                                this.time.delayedCall(5000, () => {
-                                    this.guide_text.setText(this.guide_text_string[5]).setFontSize(20);
+            this.guide_text = this.add.text(
+                this.rect_for_textbox.x,
+                this.rect_for_textbox.y,
+                this.guide_text_string[this.dialogueIndex],
+                {
+                    fontSize: '20px',
+                    color: '#ffffff',
+                    align: 'center',
+                    wordWrap: { width: 280 }
+                }
+            ).setOrigin(0.5);
 
-                                    this.time.delayedCall(5000, () => {
-                                        this.registry.set('player_x', this.player.x);
-                                        this.registry.set('player_y', this.player.y);
-                                        this.scene.start('Scene4');
-                                    });
-
-                                });
-                            });
-                        });
-                    });
-                });
-
-
-
-
-            });
-
-        }
-
-
+        });
 
         this.is_camera_moving = false;
-
-
-
-
     }
-
 
     walking_script() {
         let anim = null;
@@ -448,6 +428,33 @@ export class Scene3 extends Phaser.Scene {
 
     }
 
+    nextDialogueLine() {
+
+        this.dialogueIndex++;
+
+        if (this.dialogueIndex < this.guide_text_string.length) {
+
+            this.guide_text.setText(
+                this.guide_text_string[this.dialogueIndex]
+            );
+
+            if (this.dialogueIndex === 2 || this.dialogueIndex === 3 || this.dialogueIndex === 4) {
+                this.guide_text.setFontSize(14);
+            } else {
+                this.guide_text.setFontSize(20);
+            }
+
+        } else {
+
+            // Fine dialogo
+            this.dialogueActive = false;
+
+            this.registry.set('player_x', this.player.x);
+            this.registry.set('player_y', this.player.y);
+
+            this.scene.start('Scene4');
+        }
+    }
+
 
 }
-
