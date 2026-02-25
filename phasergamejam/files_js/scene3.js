@@ -33,6 +33,11 @@ export class Scene3 extends Phaser.Scene {
         this.enterKey = null;
 
 
+        this.afterTutorialShown = false;
+
+        this.uiCamera = null;
+
+
 
     }
 
@@ -172,6 +177,10 @@ export class Scene3 extends Phaser.Scene {
         });
 
 
+        
+        
+
+
     }
 
     update() {
@@ -188,8 +197,14 @@ export class Scene3 extends Phaser.Scene {
 
             animation_is_playing = false;
 
+
+
         }
 
+        if (this.registry.get('tutorial_done') && !this.afterTutorialShown) {
+            this.after_tutorial_script();
+            this.afterTutorialShown = true;
+        }
         this.moving_script();
 
 
@@ -456,5 +471,51 @@ export class Scene3 extends Phaser.Scene {
         }
     }
 
+    
+
+    after_tutorial_script() {
+
+        // UI CAMERA
+        this.uiCamera = this.cameras.add(
+            0,
+            0,
+            this.scale.width,
+            this.scale.height
+        );
+
+        this.uiCamera.setScroll(0, 0);
+        this.uiCamera.setZoom(1);
+
+
+        this.uiCamera.ignore([
+            this.groundLayer,
+            this.wallsLayer,
+            this.player,
+            this.npc1
+        ]);
+
+        this.dialogBox = this.add.rectangle(
+            this.scale.width / 2,
+            this.scale.height - 60,
+            this.scale.width - 40,
+            40,
+            0x000000
+        ).setOrigin(0.5);
+
+        this.dialogText = this.add.text(
+            this.scale.width / 2,
+            this.scale.height - 60,
+            "esci dal castello",
+            {
+                fontSize: '20px',
+                color: '#ffffff',
+                align: 'center',
+                wordWrap: { width: this.scale.width - 80 }
+            }
+        ).setOrigin(0.5);
+
+        this.cameras.main.ignore([this.dialogBox, this.dialogText]);
+
+    }
 
 }
