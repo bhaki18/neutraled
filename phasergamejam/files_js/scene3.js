@@ -39,27 +39,35 @@ export class Scene3 extends Phaser.Scene {
 
 
 
+        this.uscita = null;
+        this.uscita_x = 151 * 16;
+        this.uscita_y = 3 * 16;
+
+
+
     }
 
     preload() {
-        this.load.tilemapTiledJSON('map', 'phasergamejam/assets/scene3/tile_map/map.json');
-        this.load.image('tiles', 'phasergamejam/assets/scene3/tile_map/spritesheet.png');
-        this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
-        this.load.image('npc1', 'phasergamejam/assets/scene3/player.png');
+        this.load.tilemapTiledJSON('map', '/assets/scene3/tile_map/map.json');
+        this.load.image('tiles', '/assets/scene3/tile_map/spritesheet.png');
+        this.load.image('player', '/assets/scene3/scene3_player.png');
+        this.load.image('npc1', '/assets/scene3/player.png');
 
-        this.load.image('upwalk_frame1', 'phasergamejam/assets/scene3/scene3_upwalking_frame1.png');
-        this.load.image('upwalk_frame2', 'phasergamejam/assets/scene3/scene3_upwalking_frame2.png');
-        this.load.image('upwalk_frame3', 'phasergamejam/assets/scene3/scene3_upwalking_frame3.png');
+        this.load.image('upwalk_frame1', '/assets/scene3/scene3_upwalking_frame1.png');
+        this.load.image('upwalk_frame2', '/assets/scene3/scene3_upwalking_frame2.png');
+        this.load.image('upwalk_frame3', '/assets/scene3/scene3_upwalking_frame3.png');
 
-        this.load.image('leftwalk_frame1', 'phasergamejam/assets/scene3/scene3_leftwalking_frame1.png');
-        this.load.image('leftwalk_frame2', 'phasergamejam/assets/scene3/scene3_leftwalking_frame2.png');
+        this.load.image('leftwalk_frame1', '/assets/scene3/scene3_leftwalking_frame1.png');
+        this.load.image('leftwalk_frame2', '/assets/scene3/scene3_leftwalking_frame2.png');
 
-        this.load.image('rightwalk_frame1', 'phasergamejam/assets/scene3/scene3_rightwalking_frame1.png');
-        this.load.image('rightwalk_frame2', 'phasergamejam/assets/scene3/scene3_rightwalking_frame2.png');
+        this.load.image('rightwalk_frame1', '/assets/scene3/scene3_rightwalking_frame1.png');
+        this.load.image('rightwalk_frame2', '/assets/scene3/scene3_rightwalking_frame2.png');
 
 
-        this.load.image('downwalk_frame2', 'phasergamejam/assets/scene3/scene3_downwalking_frame2.png');
-        this.load.image('downwalk_frame3', 'phasergamejam/assets/scene3/scene3_downwalking_frame3.png');
+        this.load.image('downwalk_frame2', '/assets/scene3/scene3_downwalking_frame2.png');
+        this.load.image('downwalk_frame3', '/assets/scene3/scene3_downwalking_frame3.png');
+
+        this.load.image('uscita', '/assets/scene3/scene3_uscita.png');
 
 
     }
@@ -121,6 +129,15 @@ export class Scene3 extends Phaser.Scene {
 
         this.physics.add.collider(this.player, this.npc1);
 
+        //USCITA
+
+        this.uscita = this.physics.add.staticSprite(
+            this.uscita_x,
+            this.uscita_y,
+            'uscita'
+        ).setOrigin(0.5).setScale(2);
+
+
         // animazioni walking
 
         this.anims.create({
@@ -177,8 +194,17 @@ export class Scene3 extends Phaser.Scene {
         });
 
 
-        
-        
+        this.physics.add.overlap(
+            this.player,
+            this.uscita,
+            this.handleExit,
+            null,
+            this
+        );
+
+
+
+
 
 
     }
@@ -224,8 +250,9 @@ export class Scene3 extends Phaser.Scene {
             this.walking_script();
         }
 
-
+        
     }
+
 
 
 
@@ -471,11 +498,14 @@ export class Scene3 extends Phaser.Scene {
         }
     }
 
-    
+
+
+
+
 
     after_tutorial_script() {
 
-        // UI CAMERA
+        // 1️⃣ Creazione UI camera sopra la main
         this.uiCamera = this.cameras.add(
             0,
             0,
@@ -486,14 +516,7 @@ export class Scene3 extends Phaser.Scene {
         this.uiCamera.setScroll(0, 0);
         this.uiCamera.setZoom(1);
 
-
-        this.uiCamera.ignore([
-            this.groundLayer,
-            this.wallsLayer,
-            this.player,
-            this.npc1
-        ]);
-
+        // 2️⃣ UI ELEMENTS (prima li creiamo)
         this.dialogBox = this.add.rectangle(
             this.scale.width / 2,
             this.scale.height - 60,
@@ -514,8 +537,26 @@ export class Scene3 extends Phaser.Scene {
             }
         ).setOrigin(0.5);
 
-        this.cameras.main.ignore([this.dialogBox, this.dialogText]);
+        // 3️⃣ La MAIN camera NON deve vedere la UI
+        this.cameras.main.ignore([
+            this.dialogBox,
+            this.dialogText
+        ]);
 
+        // 4️⃣ La UI camera deve ignorare TUTTO il mondo
+        this.uiCamera.ignore([
+            this.groundLayer,
+            this.wallsLayer,
+            this.player,
+            this.npc1,
+            this.uscita
+        ]);
+    }
+
+    handleExit() {
+        this.registry.set('player_x', this.player.x);
+        this.registry.set('player_y', this.player.y);
+        this.scene.start('Scene5');
     }
 
 }
