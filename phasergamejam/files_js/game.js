@@ -1,4 +1,7 @@
 
+
+import Scene10 from './scene10.js';
+import Scene9 from './scene9.js';
 import Scene8 from './scene8.js';
 import Scene7 from './scene7.js';
 import Scene6 from './scene6.js';
@@ -29,6 +32,7 @@ const config = {
 };
 
 new Phaser.Game(config);
+
 
 
 
