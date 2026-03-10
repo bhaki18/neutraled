@@ -99,21 +99,19 @@ export default class Scene1 extends Phaser.Scene {
     }
 
     preload() {
-        
-        this.load.image('background_sky', 'phasergamejam/assets/scene1/scene1_background_sky.png');
+        this.load.image('background_sky', '/assets/scene1/scene1_background_sky.png');
 
         for (let i = 1; i <= 10; i++) {
-            this.load.image(`background_cloud${i}`, `phasergamejam/assets/scene1/scene1_background_cloud${i}.png`);
+            this.load.image(`background_cloud${i}`, `/assets/scene1/scene1_background_cloud${i}.png`);
         }
 
         for (let i = 1; i <= 3; i++) {
-            this.load.image(`secret_character_frame${i}`, `phasergamejam/assets/scene1/scene1_secret_character_frame${i}.png`);
-            this.load.image(`play_button_frame${i}`, `phasergamejam/assets/scene1/scene1_play_button_frame${i}.png`);
-            this.load.image(`option_button_frame${i}`, `phasergamejam/assets/scene1/scene1_option_button_frame${i}.png`);
+            this.load.image(`secret_character_frame${i}`, `/assets/scene1/scene1_secret_character_frame${i}.png`);
+            this.load.image(`play_button_frame${i}`, `/assets/scene1/scene1_play_button_frame${i}.png`);
+            this.load.image(`option_button_frame${i}`, `/assets/scene1/scene1_option_button_frame${i}.png`);
         }
 
-        this.load.image('title', 'phasergamejam/assets/scene1/scene1_title.png');
-        
+        this.load.image('title', '/assets/scene1/scene1_title.png');
     }
 
     create() {
@@ -164,7 +162,7 @@ export default class Scene1 extends Phaser.Scene {
             repeat: 0
         });
 
-        this.option_button = this.add.sprite(this.option_button_x, this.option_button_y, 'option_button_frame1').setDepth(3).setOrigin(0.5);
+        this.option_button = this.add.sprite(this.option_button_x, this.option_button_y, 'option_button_frame1').setDepth(3).setOrigin(0.5).setScale(1);
 
         this.anims.create({
             key: 'option_button_pressed',
@@ -265,9 +263,4 @@ export default class Scene1 extends Phaser.Scene {
             this.scene.start('Scene2');
         }
     }
-
 }
-
-
-
-

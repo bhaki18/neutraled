@@ -33,10 +33,10 @@ export default class Scene7 extends Phaser.Scene {
 
     preload() {
 
-        this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
-        this.load.image('npc', 'phasergamejam/assets/scene3/player.png');
-        this.load.image('bullet', 'phasergamejam/assets/scene4/scene4_bullet1.png');
-        this.load.image('shield', 'phasergamejam/assets/scene4/scene4_player_shield.png');
+        this.load.image('player', '/assets/scene3/scene3_player.png');
+        this.load.image('npc', '/assets/scene3/player.png');
+        this.load.image('bullet', '/assets/scene4/scene4_bullet1.png');
+        this.load.image('shield', '/assets/scene4/scene4_player_shield.png');
 
     }
 
@@ -408,6 +408,5 @@ export default class Scene7 extends Phaser.Scene {
         this.registry.set('enemy1_defeated', true);
         this.scene.start('Scene5');
     }
-
 
 }
