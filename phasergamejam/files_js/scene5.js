@@ -41,26 +41,26 @@ export class Scene5 extends Phaser.Scene {
     preload() {
 
         // TILEMAP (un solo file con ground + walls)
-        this.load.tilemapTiledJSON('map1', '/assets/scene5/tile_map/map.json');
+        this.load.tilemapTiledJSON('map1', 'phasergamejam/assets/scene5/tile_map/map.json');
 
         // TILESET
-        this.load.image('tiles1', '/assets/scene5/tile_map/spritesheet.png');
+        this.load.image('tiles1', 'phasergamejam/assets/scene5/tile_map/spritesheet.png');
 
         // PLAYER + SPRITES
-        this.load.image('player', '/assets/scene3/scene3_player.png');
+        this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
 
-        this.load.image('upwalk_frame1', '/assets/scene3/scene3_upwalking_frame1.png');
-        this.load.image('upwalk_frame2', '/assets/scene3/scene3_upwalking_frame2.png');
-        this.load.image('upwalk_frame3', '/assets/scene3/scene3_upwalking_frame3.png');
+        this.load.image('upwalk_frame1', 'phasergamejam/assets/scene3/scene3_upwalking_frame1.png');
+        this.load.image('upwalk_frame2', 'phasergamejam/assets/scene3/scene3_upwalking_frame2.png');
+        this.load.image('upwalk_frame3', 'phasergamejam/assets/scene3/scene3_upwalking_frame3.png');
 
-        this.load.image('leftwalk_frame1', '/assets/scene3/scene3_leftwalking_frame1.png');
-        this.load.image('leftwalk_frame2', '/assets/scene3/scene3_leftwalking_frame2.png');
+        this.load.image('leftwalk_frame1', 'phasergamejam/assets/scene3/scene3_leftwalking_frame1.png');
+        this.load.image('leftwalk_frame2', 'phasergamejam/assets/scene3/scene3_leftwalking_frame2.png');
 
-        this.load.image('rightwalk_frame1', '/assets/scene3/scene3_rightwalking_frame1.png');
-        this.load.image('rightwalk_frame2', '/assets/scene3/scene3_rightwalking_frame2.png');
+        this.load.image('rightwalk_frame1', 'phasergamejam/assets/scene3/scene3_rightwalking_frame1.png');
+        this.load.image('rightwalk_frame2', 'phasergamejam/assets/scene3/scene3_rightwalking_frame2.png');
 
-        this.load.image('downwalk_frame2', '/assets/scene3/scene3_downwalking_frame2.png');
-        this.load.image('downwalk_frame3', '/assets/scene3/scene3_downwalking_frame3.png');
+        this.load.image('downwalk_frame2', 'phasergamejam/assets/scene3/scene3_downwalking_frame2.png');
+        this.load.image('downwalk_frame3', 'phasergamejam/assets/scene3/scene3_downwalking_frame3.png');
 
         //ENEMYS 
 
