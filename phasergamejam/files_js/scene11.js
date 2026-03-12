@@ -225,9 +225,6 @@ export default class Scene11 extends Phaser.Scene {
 
         });
 
-        if (!this.registry.get('is_player_human')) {
-            this.player.setTexture('monster_player_downwalking_frame1');
-        }
 
     }
 
