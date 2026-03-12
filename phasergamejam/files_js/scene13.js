@@ -6,7 +6,7 @@ export default class Scene13 extends Phaser.Scene {
         // in questa scene il player non è piu un umano ma diventa un mostro e questo cambia anche le logiche di gioco,per esempio:
         // qui il player non sarà più libero di parare dove vuole ma viene rinchiuso in una box (tipo il fight con undyne) e dovrà parare i colpi avversari.
         // per vincere pero non basta parare,il player deve sparare all'avversario con il tasto invio nello stesso momento in cui pensa a parare.
-        
+
 
         this.keys = null;
 
@@ -60,15 +60,26 @@ export default class Scene13 extends Phaser.Scene {
 
     preload() {
 
-        this.load.image('player', 'phasergamejam/assets/scene8/monster_player.png');
-        this.load.image('npc', 'phasergamejam/assets/scene8/monster_player.png');
-        this.load.image('bullet', 'phasergamejam/assets/scene4/scene4_bullet1.png');
-        this.load.image('attack', 'phasergamejam/assets/scene4/scene4_bullet1.png');
-        this.load.image('player_slash', 'phasergamejam/assets/scene11/player_slash.png');
-        this.load.image('player_soul', 'phasergamejam/assets/scene4/scene4_player_shield.png')
+        this.load.image('player', '/assets/scene8/monster_player.png');
+        this.load.image('bullet', '/assets/scene4/scene4_bullet1.png');
+        this.load.image('attack', '/assets/scene4/scene4_bullet1.png');
+        this.load.image('player_slash', '/assets/scene11/player_slash.png');
+        this.load.image('player_soul', '/assets/scene4/scene4_player_shield.png')
     }
 
     create() {
+
+        this.player_hp = 20;
+        this.npc_hp = 100;
+
+        this.last_shot = 0;
+        this.attack_phase = 0;
+
+        this.seconds_waiter = 60 * 5;
+        this.nextPlayerShot = 0;
+        this.canShoot = true;
+
+
 
         // input
         this.keys = this.input.keyboard.addKeys({
@@ -163,7 +174,7 @@ export default class Scene13 extends Phaser.Scene {
 
 
         // npc
-        this.npc = this.physics.add.sprite(400, 130, 'npc').setDepth(3).setScale(2);
+        this.npc = this.physics.add.sprite(400, 130, 'enemy5_frame1').setDepth(3).setScale(2);
         this.physics.add.overlap(
             this.player_attacks,
             this.npc,
@@ -214,72 +225,84 @@ export default class Scene13 extends Phaser.Scene {
             0xff0000
         ).setDepth(1).setOrigin(0);
 
+        this.events.on('shutdown', () => {
+
+            if (this.attack_timer) {
+                this.attack_timer.remove();
+            }
+
+        });
+
+        if (!this.registry.get('is_player_human')) {
+            this.player.setTexture('monster_player_downwalking_frame1');
+        }
+
     }
 
     update() {
-    this.handleNpcOscillation();
-    this.highlightClosestBullet();
+        this.handleNpcOscillation();
+        this.highlightClosestBullet();
 
-    this.handlePlayerMovement();
-    this.seconds_waiter--;
-    if (this.seconds_waiter <= 0) {
-        this.handleEnemyBullets();
-        this.handlePlayerAttack();
+        this.handlePlayerMovement();
+        this.seconds_waiter--;
+        if (this.seconds_waiter <= 0) {
+            this.handleEnemyBullets();
+            this.handlePlayerAttack();
 
-        this.bullets.children.each(b => {
-            if (
-                b.x < -1000 ||
-                b.x > 1000 ||
-                b.y < -1000 ||
-                b.y > 1000
-            ) {
-                b.destroy();
-                return;
-            }
-
-            // IMPORTANTE: Separare chiaramente i due tipi di movimento
-            if (b.isRotating) {
-                // Movimento orbitale - NON usare la fisica
-                b.angleOrbit += b.speed;
-                b.radius += b.radiusSpeed;
-                
-                b.x = 400 + Math.cos(b.angleOrbit) * b.radius;
-                b.y = 300 + Math.sin(b.angleOrbit) * b.radius;
-                b.rotation = b.angleOrbit + Math.PI / 2;
-
-                // Ferma la velocità fisica quando è in rotazione
-                b.setVelocity(0, 0);
-
-                if (b.radius <= 10) {
+            this.bullets.children.each(b => {
+                if (
+                    b.x < -1000 ||
+                    b.x > 1000 ||
+                    b.y < -1000 ||
+                    b.y > 1000
+                ) {
                     b.destroy();
+                    return;
                 }
-            } 
-            else if (b.radius < 120 && !b.dashing) {
-                // Transizione a dashing
-                b.dashing = true;
-                b.isRotating = false;  // Assicurati che sia false
 
-                const dx = 400 - b.x;
-                const dy = 300 - b.y;
-                const len = Math.sqrt(dx * dx + dy * dy);
-                const speed = 350;
+                // IMPORTANTE: Separare chiaramente i due tipi di movimento
+                if (b.isRotating) {
+                    // Movimento orbitale - NON usare la fisica
+                    b.angleOrbit += b.speed;
+                    b.radius += b.radiusSpeed;
 
-                // Usa SOLO la fisica per il movimento
-                b.setVelocity(
-                    speed * dx / len,
-                    speed * dy / len
-                );
-            }
-            else if (b.dashing) {
-                // Già in movimento con fisica, lascia fare alla fisica
-                // Applica solo un po' di resistenza
-                b.setVelocity(
-                    b.body.velocity.x * 0.99,
-                    b.body.velocity.y * 0.99
-                );
-            }
-        });
-    }
+                    b.x = 400 + Math.cos(b.angleOrbit) * b.radius;
+                    b.y = 300 + Math.sin(b.angleOrbit) * b.radius;
+                    b.rotation = b.angleOrbit + Math.PI / 2;
+
+                    // Ferma la velocità fisica quando è in rotazione
+                    b.setVelocity(0, 0);
+
+                    if (b.radius <= 10) {
+                        b.destroy();
+                    }
+                }
+                else if (b.radius < 120 && !b.dashing) {
+                    // Transizione a dashing
+                    b.dashing = true;
+                    b.isRotating = false;  // Assicurati che sia false
+
+                    const dx = 400 - b.x;
+                    const dy = 300 - b.y;
+                    const len = Math.sqrt(dx * dx + dy * dy);
+                    const speed = 350;
+
+                    // Usa SOLO la fisica per il movimento
+                    b.setVelocity(
+                        speed * dx / len,
+                        speed * dy / len
+                    );
+                }
+                else if (b.dashing) {
+                    // Già in movimento con fisica, lascia fare alla fisica
+                    // Applica solo un po' di resistenza
+                    b.setVelocity(
+                        b.body.velocity.x * 0.99,
+                        b.body.velocity.y * 0.99
+                    );
+                }
+            });
+        }
 
         this.player_attacks.children.each(a => {
 
@@ -292,13 +315,13 @@ export default class Scene13 extends Phaser.Scene {
         if (this.player_hp <= 0) {
             this.scene.start('Scene12');
             this.scene.stop();
-            this.registry.set('scene13_npc_defeated', true);
+            this.registry.set('scene13_npc_defeated', false);
         }
 
         if (this.npc_hp <= 0) {
             this.scene.start('Scene12');
             this.scene.stop();
-            this.registry.set('scene13_npc_defeated', false);
+            this.registry.set('scene13_npc_defeated', true);
 
         }
     }
@@ -477,25 +500,25 @@ export default class Scene13 extends Phaser.Scene {
     }
 
     spawnRotatingSpear(startAngle) {
-    const centerX = 400;
-    const centerY = 300;
+        const centerX = 400;
+        const centerY = 300;
 
-    const spear = this.bullets.create(centerX, centerY, 'bullet');
-    
-    spear.isRotating = true;
-    spear.dashing = false;  // Aggiungi questa proprietà
-    spear.angleOrbit = startAngle;
-    spear.radius = 200;
-    spear.radiusSpeed = -0.3;
-    spear.speed = 0.04;
-    
-    spear.x = centerX + Math.cos(startAngle) * spear.radius;
-    spear.y = centerY + Math.sin(startAngle) * spear.radius;
-    spear.rotation = startAngle + Math.PI / 2;
-    
-    // Disabilita la fisica inizialmente
-    spear.setVelocity(0, 0);
-}
+        const spear = this.bullets.create(centerX, centerY, 'bullet');
+
+        spear.isRotating = true;
+        spear.dashing = false;  // Aggiungi questa proprietà
+        spear.angleOrbit = startAngle;
+        spear.radius = 200;
+        spear.radiusSpeed = -0.3;
+        spear.speed = 0.04;
+
+        spear.x = centerX + Math.cos(startAngle) * spear.radius;
+        spear.y = centerY + Math.sin(startAngle) * spear.radius;
+        spear.rotation = startAngle + Math.PI / 2;
+
+        // Disabilita la fisica inizialmente
+        spear.setVelocity(0, 0);
+    }
 
     phaseYellowSpin() {
         if (this.time.now < this.last_shot) return;

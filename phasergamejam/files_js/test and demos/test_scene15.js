@@ -256,10 +256,6 @@ export default class Scene15 extends Phaser.Scene {
             repeat: -1
         });
 
-        if (!this.registry.get('is_player_human')) {
-            this.player.setTexture('monster_player_downwalking_frame1');
-        }
-
 
 
     }
@@ -324,22 +320,12 @@ export default class Scene15 extends Phaser.Scene {
         }
 
 
-        if (!this.registry.get('is_player_human')) {
-            anim = 'monster_' + anim;
-        }
-
-
         if (anim) {
             if (this.player.anims.currentAnim?.key !== anim) {
-
                 this.player.anims.play(anim);
             }
         } else {
-            if (this.registry.get('is_player_human')) {
-                this.player.anims.play('stand', true);
-            } else {
-                this.player.anims.play('monster_stand', true);
-            }
+            this.player.anims.play('stand', true);
         }
     }
 
@@ -826,8 +812,8 @@ export default class Scene15 extends Phaser.Scene {
     handlePhase7() {
         this.current_phase = 100;
         this.time.addEvent({
-            delay: 5000,
-            callback: () => {
+            delay:5000,
+            callback:()=>{
                 this.current_phase = 0;
             }
         })
@@ -962,3 +948,26 @@ export default class Scene15 extends Phaser.Scene {
     }
 }
 
+
+// GAME CONFIG
+
+const config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    pixelArt: true,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { x: 0, y: 0 },
+            debug: false
+        }
+    },
+    scene: [Scene15]
+};
+
+new Phaser.Game(config); 

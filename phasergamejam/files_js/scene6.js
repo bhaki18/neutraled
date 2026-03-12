@@ -29,10 +29,9 @@ export default class Scene6 extends Phaser.Scene {
 
     preload() {
 
-        this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
-        this.load.image('npc', 'phasergamejam/assets/scene3/player.png');
-        this.load.image('bullet', 'phasergamejam/assets/scene4/scene4_bullet1.png');
-        this.load.image('shield', 'phasergamejam/assets/scene4/scene4_player_shield.png');
+        this.load.image('player', '/assets/scene3/scene3_player.png');
+        this.load.image('bullet', '/assets/scene4/scene4_bullet1.png');
+        this.load.image('shield', '/assets/scene4/scene4_player_shield.png');
 
     }
 
@@ -77,7 +76,7 @@ export default class Scene6 extends Phaser.Scene {
         this.enemy = this.add.sprite(
             400,
             100,
-            'npc'
+            'enemy1'
         ).setScale(3);
 
         // BULLET GROUP
@@ -105,6 +104,9 @@ export default class Scene6 extends Phaser.Scene {
         );
 
 
+        // hp
+
+        this.hp = 20;
 
         // UI
 
@@ -151,16 +153,18 @@ export default class Scene6 extends Phaser.Scene {
             callback: this.win_script,
             callbackScope:this
         });
+        
+
+        
 
     }
 
     update() {
 
         if (!this.isBattleActive) return;
-        if(this.hp == 0){
-            this.scene.start('Scene5');
-        }
 
+
+        
         this.handleMovement();
 
     }
@@ -232,19 +236,22 @@ export default class Scene6 extends Phaser.Scene {
 
     damagePlayer() {
 
-        this.hp -= 2;
+    this.hp -= 2;
 
-        if (this.hp < 0) {
-            this.hp = 0;
-        }
+    if (this.hp < 0) {
+        this.hp = 0;
+    }
 
-        this.hpBarGreen.setSize(20 * this.hp, 30);
+    this.hpBarGreen.setSize(20 * this.hp, 30);
 
-        if (this.hp === 0) {
-            this.endBattle(false);
-        }
+    if (this.hp === 0) {
+
+        this.registry.set('enemy1_defeated', false);
+        this.scene.start('Scene5');
 
     }
+
+}
 
     // ATTACKS
 
@@ -362,6 +369,7 @@ export default class Scene6 extends Phaser.Scene {
 
         if (victory) {
 
+            if(this.hp> 0){
             this.guideText.setText(
                 "complimenti hai neutralizzato il mostro!"
             );
@@ -376,6 +384,7 @@ export default class Scene6 extends Phaser.Scene {
                 this.scene.start("Scene5");
 
             });
+        }
 
         }
 
@@ -383,8 +392,14 @@ export default class Scene6 extends Phaser.Scene {
 
      win_script(){
 
+        if(this.hp>0){
         this.registry.set('enemy1_defeated',true);
         this.scene.start('Scene5');
+        }else {
+            this.registry.set('enemy1_defeated',false);
+            this.scene.stop();
+        this.scene.start('Scene5');
+        }
      }
 
 }

@@ -48,26 +48,53 @@ export class Scene3 extends Phaser.Scene {
     }
 
     preload() {
-        this.load.tilemapTiledJSON('map', 'phasergamejam/assets/scene3/tile_map/map.json');
-        this.load.image('tiles', 'phasergamejam/assets/scene3/tile_map/spritesheet.png');
-        this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
-        this.load.image('npc1', 'phasergamejam/assets/scene3/player.png');
+        this.load.tilemapTiledJSON('map', '/assets/scene3/tile_map/map.json');
+        this.load.image('tiles', '/assets/scene3/tile_map/spritesheet.png');
+        this.load.image('player', '/assets/scene3/scene3_player.png');
+        this.load.image('npc1', '/assets/scene2/scene2_secret_character.png');
 
-        this.load.image('upwalk_frame1', 'phasergamejam/assets/scene3/scene3_upwalking_frame1.png');
-        this.load.image('upwalk_frame2', 'phasergamejam/assets/scene3/scene3_upwalking_frame2.png');
+        this.load.image('upwalk_frame1', '/assets/scene3/scene3_upwalking_frame1.png');
+        this.load.image('upwalk_frame2', '/assets/scene3/scene3_upwalking_frame2.png');
         this.load.image('upwalk_frame3', '/assets/scene3/scene3_upwalking_frame3.png');
 
-        this.load.image('leftwalk_frame1', 'phasergamejam/assets/scene3/scene3_leftwalking_frame1.png');
-        this.load.image('leftwalk_frame2', 'phasergamejam/assets/scene3/scene3_leftwalking_frame2.png');
+        this.load.image('leftwalk_frame1', '/assets/scene3/scene3_leftwalking_frame1.png');
+        this.load.image('leftwalk_frame2', '/assets/scene3/scene3_leftwalking_frame2.png');
 
-        this.load.image('rightwalk_frame1', 'phasergamejam/assets/scene3/scene3_rightwalking_frame1.png');
-        this.load.image('rightwalk_frame2', 'phasergamejam/assets/scene3/scene3_rightwalking_frame2.png');
+        this.load.image('rightwalk_frame1', '/assets/scene3/scene3_rightwalking_frame1.png');
+        this.load.image('rightwalk_frame2', '/assets/scene3/scene3_rightwalking_frame2.png');
 
 
-        this.load.image('downwalk_frame2', 'phasergamejam/assets/scene3/scene3_downwalking_frame2.png');
-        this.load.image('downwalk_frame3', 'phasergamejam/assets/scene3/scene3_downwalking_frame3.png');
+        this.load.image('downwalk_frame2', '/assets/scene3/scene3_downwalking_frame2.png');
+        this.load.image('downwalk_frame3', '/assets/scene3/scene3_downwalking_frame3.png');
 
-        this.load.image('uscita', 'phasergamejam/assets/scene3/scene3_uscita.png');
+        this.load.image('uscita', '/assets/scene3/scene3_uscita.png');
+
+
+        // animazione player da mostro
+
+        // up walking
+        this.load.image('monster_player_upwalking_frame1', '/assets/scene8/monster_player_upwalking_frame1.png');
+        this.load.image('monster_player_upwalking_frame2', '/assets/scene8/monster_player_upwalking_frame2.png');
+        this.load.image('monster_player_upwalking_frame3', '/assets/scene8/monster_player_upwalking_frame3.png');
+
+
+        // down walking
+        this.load.image('monster_player_downwalking_frame1', '/assets/scene8/monster_player_downwalking_frame1.png');
+        this.load.image('monster_player_downwalking_frame2', '/assets/scene8/monster_player_downwalking_frame2.png');
+        this.load.image('monster_player_downwalking_frame3', '/assets/scene8/monster_player_downwalking_frame3.png');
+
+
+        // right walking
+
+        this.load.image('monster_player_rightwalking_frame1', '/assets/scene8/monster_player_right_frame1.png');
+        this.load.image('monster_player_rightwalking_frame2', '/assets/scene8/monster_player_right_frame2.png');
+
+
+        // left walking
+
+        this.load.image('monster_player_leftwalking_frame1', '/assets/scene8/monster_player_left_frame1.png');
+        this.load.image('monster_player_leftwalking_frame2', '/assets/scene8/monster_player_left_frame2.png');
+
 
 
     }
@@ -125,7 +152,7 @@ export class Scene3 extends Phaser.Scene {
 
         this.npc1_x = 16 * 20;
         this.npc1_y = 16 * 79;
-        this.npc1 = this.physics.add.staticSprite(this.npc1_x, this.npc1_y, 'npc1');
+        this.npc1 = this.physics.add.staticSprite(this.npc1_x, this.npc1_y, 'npc1').setScale(0.5);
 
         this.physics.add.collider(this.player, this.npc1);
 
@@ -194,6 +221,64 @@ export class Scene3 extends Phaser.Scene {
         });
 
 
+        this.anims.create({
+            key: 'monster_upwalk', // parola chiave
+            frames: [
+                { key: 'monster_player_upwalking_frame2' }, // frames dell'animazione
+                { key: 'monster_player_upwalking_frame1' },
+                { key: 'monster_player_upwalking_frame3' },
+                { key: 'monster_player_upwalking_frame1' }
+            ],
+            frameRate: 6, // quanti frame al secondo
+            repeat: -1  // loop infinito
+        });
+
+        this.anims.create({
+            key: 'monster_downwalk', // parola chiave
+            frames: [
+                { key: 'monster_player_downwalking_frame2' }, // frames dell'animazione
+                { key: 'monster_player_downwalking_frame1' },
+                { key: 'monster_player_downwalking_frame3' },
+                { key: 'monster_player_downwalking_frame1' }
+            ],
+            frameRate: 6, // quanti frame al secondo
+            repeat: -1  // loop infinito
+        });
+
+        this.anims.create({
+            key: 'monster_rightwalk', // parola chiave
+            frames: [
+                { key: 'monster_player_rightwalking_frame1' }, // frames dell'animazione
+                { key: 'monster_player_rightwalking_frame2' },
+            ],
+            frameRate: 6, // quanti frame al secondo
+            repeat: -1  // loop infinito
+        });
+
+        this.anims.create({
+            key: 'monster_leftwalk', // parola chiave
+            frames: [
+                { key: 'monster_player_leftwalking_frame1' }, // frames dell'animazione
+                { key: 'monster_player_leftwalking_frame2' },
+            ],
+            frameRate: 6, // quanti frame al secondo
+            repeat: -1  // loop infinito
+        });
+
+        this.anims.create({
+            key: 'monster_stand', // parola chiave
+            frames: [
+                { key: 'monster_player_downwalking_frame1' }, // frames dell'animazione
+            ],
+            frameRate: 6, // quanti frame al secondo
+            repeat: -1  // loop infinito
+        });
+
+
+
+
+
+
         this.physics.add.overlap(
             this.player,
             this.uscita,
@@ -203,6 +288,9 @@ export class Scene3 extends Phaser.Scene {
         );
 
 
+        if (!this.registry.get('is_player_human')) {
+            this.player.setTexture('monster_player_downwalking_frame1');
+        }
 
 
 
@@ -242,7 +330,11 @@ export class Scene3 extends Phaser.Scene {
 
             animation_is_playing = true;
 
-            this.player.anims.play('stand');
+            if (this.registry.get('is_player_human')) {
+                this.player.anims.play('stand');
+            } else {
+                this.player.anims.play('monster_stand');
+            }
 
         }
 
@@ -250,7 +342,7 @@ export class Scene3 extends Phaser.Scene {
             this.walking_script();
         }
 
-        
+
     }
 
 
@@ -445,19 +537,35 @@ export class Scene3 extends Phaser.Scene {
 
         if (this.keys.up.isDown) {
 
-            anim = 'upwalk';
+            if (this.registry.get('is_player_human')) {
+                anim = 'upwalk';
+            } else {
+                anim = 'monster_upwalk';
+            }
         }
         if (this.keys.down.isDown) {
 
-            anim = 'walk';
+            if (this.registry.get('is_player_human')) {
+                anim = 'walk';
+            } else {
+                anim = 'monster_downwalk';
+            }
         }
         if (this.keys.left.isDown) {
 
-            anim = 'leftwalk';
+            if (this.registry.get('is_player_human')) {
+                anim = 'leftwalk';
+            } else {
+                anim = 'monster_leftwalk';
+            }
         }
         if (this.keys.right.isDown) {
 
-            anim = 'rightwalk';
+            if (this.registry.get('is_player_human')) {
+                anim = 'rightwalk';
+            } else {
+                anim = 'monster_rightwalk';
+            }
         }
 
         if (anim) {
@@ -465,7 +573,11 @@ export class Scene3 extends Phaser.Scene {
                 this.player.anims.play(anim);
             }
         } else {
-            this.player.anims.play('stand', true);
+            if (this.registry.get('is_player_human')) {
+                this.player.anims.play('stand', true);
+            } else {
+                this.player.anims.play('monster_stand', true);
+            }
         }
 
     }

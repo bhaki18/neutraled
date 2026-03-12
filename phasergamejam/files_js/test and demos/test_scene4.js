@@ -144,8 +144,12 @@ export default class Scene4 extends Phaser.Scene {
 
     update() {
 
-        battle_end_script();
-        
+        if (this.isBulletSpawned) {
+            this.battle_end_script();
+        }
+
+
+
         if (this.keys.up.isDown) {
             this.player_shield.y -= this.player_speed;
         }
@@ -177,6 +181,7 @@ export default class Scene4 extends Phaser.Scene {
 
         if (this.isBulletSpawned) {
             this.time.delayedCall(4000, () => {
+
 
                 if (this.bullet1 && this.bullet1.active) {
                     this.physics.moveToObject(this.bullet1, this.player_sprite, this.bullets_speed);
@@ -233,20 +238,24 @@ export default class Scene4 extends Phaser.Scene {
                 this.physics.add.overlap(this.bullet1, this.player_shield, () => {
                     this.bullet1.destroy();
 
+
                 });
 
                 this.physics.add.overlap(this.bullet2, this.player_shield, () => {
                     this.bullet2.destroy();
+
 
                 });
 
                 this.physics.add.overlap(this.bullet3, this.player_shield, () => {
                     this.bullet3.destroy();
 
+
                 });
 
                 this.physics.add.overlap(this.bullet4, this.player_shield, () => {
                     this.bullet4.destroy();
+
 
                 });
 
@@ -254,7 +263,8 @@ export default class Scene4 extends Phaser.Scene {
                     this.bullet1.destroy();
                     this.guide_text.setText(this.guide_text_string[1]);
                     this.hp -= 2;
-                    this.hp_bar_green.setSize(20 * this.hp,30);
+                    this.hp_bar_green.setSize(20 * this.hp, 30);
+
 
                 });
 
@@ -262,7 +272,8 @@ export default class Scene4 extends Phaser.Scene {
                     this.bullet2.destroy();
                     this.guide_text.setText(this.guide_text_string[1]);
                     this.hp -= 2;
-                    this.hp_bar_green.setSize(20 * this.hp,30);
+                    this.hp_bar_green.setSize(20 * this.hp, 30);
+
 
                 });
 
@@ -270,7 +281,8 @@ export default class Scene4 extends Phaser.Scene {
                     this.bullet3.destroy();
                     this.guide_text.setText(this.guide_text_string[1]);
                     this.hp -= 2;
-                    this.hp_bar_green.setSize(20 * this.hp,30);
+                    this.hp_bar_green.setSize(20 * this.hp, 30);
+
 
                 });
 
@@ -278,26 +290,37 @@ export default class Scene4 extends Phaser.Scene {
                     this.bullet4.destroy();
                     this.guide_text.setText(this.guide_text_string[1]);
                     this.hp -= 2;
-                    this.hp_bar_green.setSize(20 * this.hp,30);
+                    this.hp_bar_green.setSize(20 * this.hp, 30);
+
 
                 });
+                this.isBulletSpawned = true;
 
 
             });
-            this.isBulletSpawned = true;
+
         }
     }
 
+    battle_end_script() {
+        if (
+            (!this.bullet1 || !this.bullet1.active) &&
+            (!this.bullet2 || !this.bullet2.active) &&
+            (!this.bullet3 || !this.bullet3.active) &&
+            (!this.bullet4 || !this.bullet4.active)
+        ) {
+            this.time.delayedCall(1000, () => {
+                this.guide_text.setText('complimenti hai completato il tutorial!\nora esci dal castello e neutralizza quei mostri!');
+                this.time.delayedCall(7000, () => {
 
-    battle_end_script(){
-        if(!this.bullet1 && !this.bullet2 && !this.bullet3 && !this.bullet4){
-            this.time.delayedCall(1000,()=>{
+                    this.scene.start('Scene3');
+                    this.registry.set('tutorial_done', true);
+                })
 
-                this.scene.start('Scene3');
-                this.registry('tutorial_done',true);
             });
         }
     }
+
 }
 
 const config = {

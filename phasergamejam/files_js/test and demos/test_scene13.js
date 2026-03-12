@@ -6,7 +6,7 @@ export default class Scene13 extends Phaser.Scene {
         // in questa scene il player non è piu un umano ma diventa un mostro e questo cambia anche le logiche di gioco,per esempio:
         // qui il player non sarà più libero di parare dove vuole ma viene rinchiuso in una box (tipo il fight con undyne) e dovrà parare i colpi avversari.
         // per vincere pero non basta parare,il player deve sparare all'avversario con il tasto invio nello stesso momento in cui pensa a parare.
-        // questa è la scena 13 ovvero il secondo fight con questa logica di gioco,voglio renderlo molto piu difficile,aggiunendo nuove meccaniche,pls aiutami
+        
 
         this.keys = null;
 
@@ -217,75 +217,69 @@ export default class Scene13 extends Phaser.Scene {
     }
 
     update() {
+    this.handleNpcOscillation();
+    this.highlightClosestBullet();
 
-        this.handleNpcOscillation();
-        this.highlightClosestBullet();
+    this.handlePlayerMovement();
+    this.seconds_waiter--;
+    if (this.seconds_waiter <= 0) {
+        this.handleEnemyBullets();
+        this.handlePlayerAttack();
 
-        this.handlePlayerMovement();
-        this.seconds_waiter--;
-        if (this.seconds_waiter <= 0) {
-            this.handleEnemyBullets();
-            this.handlePlayerAttack();
+        this.bullets.children.each(b => {
+            if (
+                b.x < -1000 ||
+                b.x > 1000 ||
+                b.y < -1000 ||
+                b.y > 1000
+            ) {
+                b.destroy();
+                return;
+            }
 
-            this.bullets.children.each(b => {
+            // IMPORTANTE: Separare chiaramente i due tipi di movimento
+            if (b.isRotating) {
+                // Movimento orbitale - NON usare la fisica
+                b.angleOrbit += b.speed;
+                b.radius += b.radiusSpeed;
+                
+                b.x = 400 + Math.cos(b.angleOrbit) * b.radius;
+                b.y = 300 + Math.sin(b.angleOrbit) * b.radius;
+                b.rotation = b.angleOrbit + Math.PI / 2;
 
-                if (
-                    b.x < -1000 ||
-                    b.x > 1000 ||
-                    b.y < -1000 ||
-                    b.y > 1000
-                ) {
+                // Ferma la velocità fisica quando è in rotazione
+                b.setVelocity(0, 0);
+
+                if (b.radius <= 10) {
                     b.destroy();
-                    return;
                 }
+            } 
+            else if (b.radius < 120 && !b.dashing) {
+                // Transizione a dashing
+                b.dashing = true;
+                b.isRotating = false;  // Assicurati che sia false
 
+                const dx = 400 - b.x;
+                const dy = 300 - b.y;
+                const len = Math.sqrt(dx * dx + dy * dy);
+                const speed = 350;
+
+                // Usa SOLO la fisica per il movimento
+                b.setVelocity(
+                    speed * dx / len,
+                    speed * dy / len
+                );
+            }
+            else if (b.dashing) {
+                // Già in movimento con fisica, lascia fare alla fisica
+                // Applica solo un po' di resistenza
                 b.setVelocity(
                     b.body.velocity.x * 0.99,
                     b.body.velocity.y * 0.99
                 );
-
-            });
-
-            this.bullets.children.each(b => {
-
-                if (b.isRotating) {
-
-                    b.angleOrbit += b.speed;
-                    b.radius += b.radiusSpeed;
-
-                    b.x = 400 + Math.cos(b.angleOrbit) * b.radius;
-                    b.y = 300 + Math.sin(b.angleOrbit) * b.radius;
-
-                    b.rotation = b.angleOrbit + Math.PI / 2;
-
-                    if (b.radius <= 10) {
-                        b.destroy();
-                    }
-
-                    return;
-                }
-                if (b.radius < 120 && !b.dashing) {
-
-                    b.dashing = true;
-
-                    const dx = 400 - b.x;
-                    const dy = 300 - b.y;
-
-                    const len = Math.sqrt(dx * dx + dy * dy);
-
-                    const speed = 350;
-
-                    b.isRotating = false;
-
-                    b.setVelocity(
-                        speed * dx / len,
-                        speed * dy / len
-                    );
-
-                }
-
-            });
-        }
+            }
+        });
+    }
 
         this.player_attacks.children.each(a => {
 
@@ -296,15 +290,15 @@ export default class Scene13 extends Phaser.Scene {
         });
 
         if (this.player_hp <= 0) {
-            this.scene.start('Scene10');
+            this.scene.start('Scene12');
             this.scene.stop();
-            this.registry.set('scene11_npc_defeated', true);
+            this.registry.set('scene13_npc_defeated', true);
         }
 
         if (this.npc_hp <= 0) {
-            this.scene.start('Scene10');
+            this.scene.start('Scene12');
             this.scene.stop();
-            this.registry.set('scene11_npc_defeated', false);
+            this.registry.set('scene13_npc_defeated', false);
 
         }
     }
@@ -388,7 +382,7 @@ export default class Scene13 extends Phaser.Scene {
 
             this.nextPlayerShot = this.time.now + this.playerFireCooldown;
 
-            const attack = this.player_attacks.create(400, 300, 'attack').setTint(0xff0000); // rosso;;
+            const attack = this.player_attacks.create(400, 300, 'attack').setTint(0xff0000); // rosso;
 
             const speed = 400;
             attack.setVelocityY(-speed);
@@ -483,25 +477,25 @@ export default class Scene13 extends Phaser.Scene {
     }
 
     spawnRotatingSpear(startAngle) {
-        const centerX = 400;
-        const centerY = 300;
+    const centerX = 400;
+    const centerY = 300;
 
-        const spear = this.bullets.create(centerX, centerY, 'bullet');
-
-        spear.isRotating = true;
-        spear.angleOrbit = startAngle;
-
-        spear.radius = 200;
-        spear.radiusSpeed = -0.3;   // più lento
-        spear.speed = 0.04;
-
-        // posizione iniziale corretta
-        spear.x = centerX + Math.cos(startAngle) * spear.radius;
-        spear.y = centerY + Math.sin(startAngle) * spear.radius;
-
-        // facoltativo: ruota la sprite verso il centro
-        spear.rotation = startAngle + Math.PI / 2;
-    }
+    const spear = this.bullets.create(centerX, centerY, 'bullet');
+    
+    spear.isRotating = true;
+    spear.dashing = false;  // Aggiungi questa proprietà
+    spear.angleOrbit = startAngle;
+    spear.radius = 200;
+    spear.radiusSpeed = -0.3;
+    spear.speed = 0.04;
+    
+    spear.x = centerX + Math.cos(startAngle) * spear.radius;
+    spear.y = centerY + Math.sin(startAngle) * spear.radius;
+    spear.rotation = startAngle + Math.PI / 2;
+    
+    // Disabilita la fisica inizialmente
+    spear.setVelocity(0, 0);
+}
 
     phaseYellowSpin() {
         if (this.time.now < this.last_shot) return;

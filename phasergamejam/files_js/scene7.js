@@ -33,10 +33,9 @@ export default class Scene7 extends Phaser.Scene {
 
     preload() {
 
-        this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
-        this.load.image('npc', 'phasergamejam/assets/scene3/player.png');
-        this.load.image('bullet', 'phasergamejam/assets/scene4/scene4_bullet1.png');
-        this.load.image('shield', 'phasergamejam/assets/scene4/scene4_player_shield.png');
+        this.load.image('player', '/assets/scene3/scene3_player.png');
+        this.load.image('bullet', '/assets/scene4/scene4_bullet1.png');
+        this.load.image('shield', '/assets/scene4/scene4_player_shield.png');
 
     }
 
@@ -81,7 +80,7 @@ export default class Scene7 extends Phaser.Scene {
         this.enemy = this.add.sprite(
             400,
             100,
-            'npc'
+            'enemy2'
         ).setScale(3);
 
         // BULLET GROUP
@@ -109,6 +108,8 @@ export default class Scene7 extends Phaser.Scene {
         );
 
 
+        //hp
+        this.hp = 20;
 
         // UI
 
@@ -150,21 +151,20 @@ export default class Scene7 extends Phaser.Scene {
         });
 
         this.time.addEvent({
-            delay: 40000,
+            delay: 60000,
             loop: false,
             callback: this.win_script,
             callbackScope: this
         });
 
+        this.hp = 20;
     }
 
     update(time) {
 
         if (!this.isBattleActive) return;
 
-        if (this.hp == 0) {
-            this.scene.start('Scene5');
-        }
+       
 
         this.handleMovement();
 
@@ -242,19 +242,22 @@ export default class Scene7 extends Phaser.Scene {
 
     damagePlayer() {
 
-        this.hp -= 1;
+    this.hp -= 2;
 
-        if (this.hp < 0) {
-            this.hp = 0;
-        }
+    if (this.hp < 0) {
+        this.hp = 0;
+    }
 
-        this.hpBarGreen.setSize(20 * this.hp, 30);
+    this.hpBarGreen.setSize(20 * this.hp, 30);
 
-        if (this.hp === 0) {
-            this.endBattle(false);
-        }
+    if (this.hp === 0) {
+
+        this.registry.set('enemy2_defeated', false);
+        this.scene.start('Scene5');
 
     }
+
+}
 
     // ATTACKS
 
@@ -382,6 +385,7 @@ export default class Scene7 extends Phaser.Scene {
 
         this.isBattleActive = false;
 
+        
         if (victory) {
 
             this.guideText.setText(
@@ -391,7 +395,7 @@ export default class Scene7 extends Phaser.Scene {
             this.time.delayedCall(2000, () => {
 
                 this.registry.set(
-                    "enemy1_defeated",
+                    "enemy2_defeated",
                     true
                 );
 
@@ -405,8 +409,14 @@ export default class Scene7 extends Phaser.Scene {
 
     win_script() {
 
-        this.registry.set('enemy1_defeated', true);
+        if(this.hp>0){
+        this.registry.set('enemy2_defeated', true);
         this.scene.start('Scene5');
+        }else{
+            this.registry.set('enemy2_defeated',false);
+            this.scene.stop();
+            this.scene.start('Scene5');
+        }
     }
 
 }

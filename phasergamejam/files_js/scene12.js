@@ -33,27 +33,30 @@ export default class Scene12 extends Phaser.Scene {
     preload() {
 
         // TILEMAP (un solo file con ground + walls)
-        this.load.tilemapTiledJSON('map4', 'phasergamejam/assets/scene12/tile_map/map.json');
+        this.load.tilemapTiledJSON('map4', '/assets/scene12/tile_map/map.json');
 
         // TILESET
-        this.load.image('tiles4', 'phasergamejam/assets/scene12/tile_map/spritesheet.png');
+        this.load.image('tiles4', '/assets/scene12/tile_map/spritesheet.png');
 
 
         // PLAYER + SPRITES
-        this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
+        this.load.image('player', '/assets/scene3/scene3_player.png');
 
-        this.load.image('upwalk_frame1', 'phasergamejam/assets/scene3/scene3_upwalking_frame1.png');
-        this.load.image('upwalk_frame2', 'phasergamejam/assets/scene3/scene3_upwalking_frame2.png');
-        this.load.image('upwalk_frame3', 'phasergamejam/assets/scene3/scene3_upwalking_frame3.png');
+        this.load.image('upwalk_frame1', '/assets/scene3/scene3_upwalking_frame1.png');
+        this.load.image('upwalk_frame2', '/assets/scene3/scene3_upwalking_frame2.png');
+        this.load.image('upwalk_frame3', '/assets/scene3/scene3_upwalking_frame3.png');
 
-        this.load.image('leftwalk_frame1', 'phasergamejam/assets/scene3/scene3_leftwalking_frame1.png');
-        this.load.image('leftwalk_frame2', 'phasergamejam/assets/scene3/scene3_leftwalking_frame2.png');
+        this.load.image('leftwalk_frame1', '/assets/scene3/scene3_leftwalking_frame1.png');
+        this.load.image('leftwalk_frame2', '/assets/scene3/scene3_leftwalking_frame2.png');
 
-        this.load.image('rightwalk_frame1', 'phasergamejam/assets/scene3/scene3_rightwalking_frame1.png');
-        this.load.image('rightwalk_frame2', 'phasergamejam/assets/scene3/scene3_rightwalking_frame2.png');
+        this.load.image('rightwalk_frame1', '/assets/scene3/scene3_rightwalking_frame1.png');
+        this.load.image('rightwalk_frame2', '/assets/scene3/scene3_rightwalking_frame2.png');
 
-        this.load.image('downwalk_frame2', 'phasergamejam/assets/scene3/scene3_downwalking_frame2.png');
-        this.load.image('downwalk_frame3', 'phasergamejam/assets/scene3/scene3_downwalking_frame3.png');
+        this.load.image('downwalk_frame2', '/assets/scene3/scene3_downwalking_frame2.png');
+        this.load.image('downwalk_frame3', '/assets/scene3/scene3_downwalking_frame3.png');
+
+        // enemy5 
+        this.load.image('enemy5_frame1', '/assets/scene12/enemy5_frame1.png');
 
     }
 
@@ -96,7 +99,7 @@ export default class Scene12 extends Phaser.Scene {
 
         // npc 
 
-        this.npc = this.physics.add.sprite(this.npc_x, this.npc_y, 'player');
+        this.npc = this.physics.add.sprite(this.npc_x, this.npc_y + 2, 'enemy5_frame1').setFlipX(true);
 
 
 
@@ -158,6 +161,18 @@ export default class Scene12 extends Phaser.Scene {
             repeat: -1
         });
 
+        if (this.registry.get('scene13_npc_defeated')) {
+            this.npc.destroy();
+            this.player.x = this.registry.get('scene12_player_x');
+            this.player.y = this.registry.get('scene12_player_y');
+            this.event_triggered = true;
+        } else {
+            this.event_triggered = false;
+        }
+
+        if (!this.registry.get('is_player_human')) {
+            this.player.setTexture('monster_player_downwalking_frame1');
+        }
     }
 
     update() {
@@ -199,19 +214,29 @@ export default class Scene12 extends Phaser.Scene {
         }
 
 
+        if (!this.registry.get('is_player_human')) {
+            anim = 'monster_' + anim;
+        }
+
+
         if (anim) {
             if (this.player.anims.currentAnim?.key !== anim) {
+
                 this.player.anims.play(anim);
             }
         } else {
-            this.player.anims.play('stand', true);
+            if (this.registry.get('is_player_human')) {
+                this.player.anims.play('stand', true);
+            } else {
+                this.player.anims.play('monster_stand', true);
+            }
         }
 
         if (this.player.x < 8) {
             this.scene.start('Scene10');
         }
 
-        if(this.player.x > 16 * 91){
+        if (this.player.x > 16 * 91) {
             this.scene.start('Scene14');
         }
     }
@@ -279,6 +304,9 @@ export default class Scene12 extends Phaser.Scene {
             this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
             this.playerspeed = 120;
             this.is_camera_moving = true;
+
+            this.registry.set('scene12_player_x', this.player.x);
+            this.registry.set('scene12_player_y', this.player.y);
 
             this.scene.start('Scene13');
 

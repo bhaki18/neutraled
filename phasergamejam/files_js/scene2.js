@@ -75,15 +75,19 @@ export default class Scene2 extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('space_background_frame1', 'phasergamejam/assets/scene2/scene2_space_background_frame1.png');
-        this.load.image('space_background_frame2', 'phasergamejam/assets/scene2/scene2_space_background_frame2.png');
+        this.load.image('space_background_frame1', '/assets/scene2/scene2_space_background_frame1.png');
+        this.load.image('space_background_frame2', '/assets/scene2/scene2_space_background_frame2.png');
 
-        this.load.image('secret_character', 'phasergamejam/assets/scene2/scene2_secret_character.png');
+        this.load.image('secret_character', '/assets/scene2/scene2_secret_character.png');
 
-        this.load.audio('secret_character_talking_sound', 'phasergamejam/assets/scene2/scene2_secret_character_talking_sound.mp3');
+        this.load.audio('secret_character_talking_sound', '/assets/scene2/scene2_secret_character_talking_sound.mp3');
     }
 
     create() {
+
+        this.registry.set('is_player_human',true);
+
+
         this.backgroud = this.add.sprite(0, 50, 'space_background_frame1').setDepth(1).setScale(8).setOrigin(0);
 
         this.anims.create({

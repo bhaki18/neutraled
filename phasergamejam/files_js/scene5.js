@@ -21,12 +21,12 @@ export class Scene5 extends Phaser.Scene {
         this.isEnemy1Defeated = null;
 
         this.enemy2 = null;
-        this.enemy2_x = 16 * 35 ;
+        this.enemy2_x = 16 * 35;
         this.enemy2_y = 16 * 32;
 
         this.isEnemy2Defeated = null;
 
-        
+
 
         this.is_camera_moving = true;
         this.dialogueActive = false;
@@ -41,28 +41,30 @@ export class Scene5 extends Phaser.Scene {
     preload() {
 
         // TILEMAP (un solo file con ground + walls)
-        this.load.tilemapTiledJSON('map1', 'phasergamejam/assets/scene5/tile_map/map.json');
+        this.load.tilemapTiledJSON('map1', '/assets/scene5/tile_map/map.json');
 
         // TILESET
-        this.load.image('tiles1', 'phasergamejam/assets/scene5/tile_map/spritesheet.png');
+        this.load.image('tiles1', '/assets/scene5/tile_map/spritesheet.png');
 
         // PLAYER + SPRITES
-        this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
+        this.load.image('player', '/assets/scene3/scene3_player.png');
 
-        this.load.image('upwalk_frame1', 'phasergamejam/assets/scene3/scene3_upwalking_frame1.png');
-        this.load.image('upwalk_frame2', 'phasergamejam/assets/scene3/scene3_upwalking_frame2.png');
-        this.load.image('upwalk_frame3', 'phasergamejam/assets/scene3/scene3_upwalking_frame3.png');
+        this.load.image('upwalk_frame1', '/assets/scene3/scene3_upwalking_frame1.png');
+        this.load.image('upwalk_frame2', '/assets/scene3/scene3_upwalking_frame2.png');
+        this.load.image('upwalk_frame3', '/assets/scene3/scene3_upwalking_frame3.png');
 
-        this.load.image('leftwalk_frame1', 'phasergamejam/assets/scene3/scene3_leftwalking_frame1.png');
-        this.load.image('leftwalk_frame2', 'phasergamejam/assets/scene3/scene3_leftwalking_frame2.png');
+        this.load.image('leftwalk_frame1', '/assets/scene3/scene3_leftwalking_frame1.png');
+        this.load.image('leftwalk_frame2', '/assets/scene3/scene3_leftwalking_frame2.png');
 
-        this.load.image('rightwalk_frame1', 'phasergamejam/assets/scene3/scene3_rightwalking_frame1.png');
-        this.load.image('rightwalk_frame2', 'phasergamejam/assets/scene3/scene3_rightwalking_frame2.png');
+        this.load.image('rightwalk_frame1', '/assets/scene3/scene3_rightwalking_frame1.png');
+        this.load.image('rightwalk_frame2', '/assets/scene3/scene3_rightwalking_frame2.png');
 
-        this.load.image('downwalk_frame2', 'phasergamejam/assets/scene3/scene3_downwalking_frame2.png');
-        this.load.image('downwalk_frame3', 'phasergamejam/assets/scene3/scene3_downwalking_frame3.png');
+        this.load.image('downwalk_frame2', '/assets/scene3/scene3_downwalking_frame2.png');
+        this.load.image('downwalk_frame3', '/assets/scene3/scene3_downwalking_frame3.png');
 
         //ENEMYS 
+        this.load.image('enemy1', '/assets/scene5/npc1_frame1.png');
+        this.load.image('enemy2', '/assets/scene5/enemy2_frame1.png');
 
     }
 
@@ -97,13 +99,15 @@ export class Scene5 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.wallsLayer1);
         this.wallsLayer1.setCollisionByExclusion([-1]);
 
+
+
         // ===== NPC =======
-        this.enemy1 = this.physics.add.staticSprite(this.enemy1_x, this.enemy1_y, 'enemy1');
+        this.enemy1 = this.physics.add.staticSprite(this.enemy1_x, this.enemy1_y, 'enemy1').setScale(1.5);
         this.physics.add.collider(this.player, this.enemy1);
 
 
 
-        this.enemy2 = this.physics.add.staticSprite(this.enemy2_x, this.enemy2_y, 'enemy2');
+        this.enemy2 = this.physics.add.staticSprite(this.enemy2_x, this.enemy2_y - 30, 'enemy2').setScale(1.5);
         this.physics.add.collider(this.player, this.enemy2);
 
 
@@ -164,6 +168,36 @@ export class Scene5 extends Phaser.Scene {
             frameRate: 6,
             repeat: -1
         });
+
+        if (this.registry.get('enemy1_defeated')) {
+            this.player.x = this.registry.get('scene5_player_x');
+            this.player.y = this.registry.get('scene5_player_y');
+        }
+
+        if (this.registry.get('enemy2_defeated')) {
+            this.player.x = this.registry.get('scene5_player_x');
+            this.player.y = this.registry.get('scene5_player_y');
+        }
+
+        if (this.player_comeback) {
+            this.player.x = this.registry.get('scene5_player_x');
+            this.player.y = this.registry.get('scene5_player_y') + 30;
+        }
+
+        if (this.registry.get('enemy1_defeated')) {
+            this.enemy1.destroy();
+        } else {
+            this.eventTriggered1 = false;
+        }
+        if (this.registry.get('enemy2_defeated')) {
+            this.enemy2.destroy();
+        } else {
+            this.eventTriggered2 = false;
+        }
+
+        if (!this.registry.get('is_player_human')) {
+            this.player.setTexture('monster_player_downwalking_frame1');
+        }
     }
 
     update() {
@@ -171,7 +205,7 @@ export class Scene5 extends Phaser.Scene {
 
         this.handleMovement();
 
-        
+
 
         if (this.player.x > 16 * 25 && !this.eventTriggered1) {
 
@@ -179,7 +213,7 @@ export class Scene5 extends Phaser.Scene {
             this.eventTriggered1 = true;
 
             this.animation_script1();
-  
+
             this.player.anims.play('stand');
         }
 
@@ -191,13 +225,15 @@ export class Scene5 extends Phaser.Scene {
             this.eventTriggered2 = true;
 
             this.animation_script2();
-  
+
             this.player.anims.play('stand');
         }
 
         if (this.dialogueActive && Phaser.Input.Keyboard.JustDown(this.enterKey)) {
             this.nextDialogueLine();
         }
+
+
 
     }
 
@@ -233,21 +269,32 @@ export class Scene5 extends Phaser.Scene {
         }
 
 
+        if (!this.registry.get('is_player_human')) {
+            anim = 'monster_' + anim;
+        }
+
+
         if (anim) {
             if (this.player.anims.currentAnim?.key !== anim) {
+
                 this.player.anims.play(anim);
             }
         } else {
-            this.player.anims.play('stand', true);
+            if (this.registry.get('is_player_human')) {
+                this.player.anims.play('stand', true);
+            } else {
+                this.player.anims.play('monster_stand', true);
+            }
         }
 
         if (this.player.y > 16 * 70 - 14) {
-            
+
             this.scene.start('Scene3');
         }
-        if(this.player.y< 14){
-            this.registry.set('scene5_player_x',this.player.x);
-            this.registry.set('scene5_player_y',this.player.y);
+        if (this.player.y < 14) {
+            this.registry.set('scene5_player_x', this.player.x);
+            this.registry.set('scene5_player_y', this.player.y);
+            this.player_comeback = true;
             this.scene.start('Scene8');
         }
     }
@@ -316,7 +363,7 @@ export class Scene5 extends Phaser.Scene {
 
             this.rect_for_textbox = this.add.rectangle(
                 this.enemy2_x,
-                this.enemy2_y + 100,
+                this.enemy2_y + 90,
                 300,
                 50,
                 0x000000
@@ -360,12 +407,16 @@ export class Scene5 extends Phaser.Scene {
 
             // this.cameras.main.startFollow(this.player);
             this.is_camera_moving = true;
-            if(this.eventTriggered1){
+            if (this.eventTriggered1) {
                 this.scene.start('Scene6');
+                this.registry.set('scene5_player_x', this.player.x);
+                this.registry.set('scene5_player_y', this.player.y);
             }
-            if(this.eventTriggered2){
+            if (this.eventTriggered2) {
                 this.scene.stop('Scene6');
                 this.scene.start('Scene7');
+                this.registry.set('scene5_player_x', this.player.x + 30);
+                this.registry.set('scene5_player_y', this.player.y);
             }
         }
     }

@@ -32,10 +32,9 @@ export default class Scene9 extends Phaser.Scene {
 
     preload() {
 
-        this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
-        this.load.image('npc', 'phasergamejam/assets/scene3/player.png');
-        this.load.image('bullet', 'phasergamejam/assets/scene4/scene4_bullet1.png');
-        this.load.image('shield', 'phasergamejam/assets/scene4/scene4_player_shield.png');
+        this.load.image('player', '/assets/scene3/scene3_player.png');
+        this.load.image('bullet', '/assets/scene4/scene4_bullet1.png');
+        this.load.image('shield', '/assets/scene4/scene4_player_shield.png');
 
     }
 
@@ -80,8 +79,8 @@ export default class Scene9 extends Phaser.Scene {
         this.enemy = this.add.sprite(
             400,
             100,
-            'npc'
-        ).setScale(3);
+            'enemy3_frame1'
+        ).setScale(4);
 
         // BULLET GROUP
 
@@ -89,7 +88,7 @@ export default class Scene9 extends Phaser.Scene {
             classType: Phaser.Physics.Arcade.Image,
             maxSize: 100,
             runChildUpdate: true
-        })
+        }).setTint(0xff00ff);
 
 
         // COLLISIONS
@@ -213,14 +212,16 @@ export default class Scene9 extends Phaser.Scene {
             callbackScope: this
         });
 
+        if (!this.registry.get('is_player_human')) {
+            this.player.setTexture('monster_player_downwalking_frame1');
+        }
+
     }
 
     update() {
 
         if (!this.isBattleActive) return;
-        if (this.hp == 0) {
-            this.scene.start('Scene8');
-        }
+
 
         this.handleMovement();
 
@@ -302,7 +303,7 @@ export default class Scene9 extends Phaser.Scene {
 
     spawnBullet(x, y) {
 
-        const bullet = this.bullets.create(x, y, 'bullet');
+        const bullet = this.bullets.create(x, y, 'bullet').setTint(0xff00ff);
 
         return bullet;
 
@@ -342,8 +343,12 @@ export default class Scene9 extends Phaser.Scene {
         this.hpBarGreen.setSize(20 * this.hp, 30);
 
         if (this.hp === 0) {
-            this.endBattle(false);
+            this.registry.set('enemy3_defeated', false);
+            this.scene.stop();
+            this.scene.start('Scene8');
         }
+
+
 
     }
 
@@ -400,7 +405,7 @@ export default class Scene9 extends Phaser.Scene {
 
     }
 
-   
+
     setGravityDirection(x, y) {
         this.shield.body.setAllowGravity(true);
         this.shield.body.setGravityX(x);
@@ -537,10 +542,7 @@ export default class Scene9 extends Phaser.Scene {
 
             this.time.delayedCall(2000, () => {
 
-                this.registry.set(
-                    "enemy1_defeated",
-                    true
-                );
+                this.registry.set('enemy3_defeated', true);
 
                 this.scene.start("Scene8");
 
@@ -552,7 +554,8 @@ export default class Scene9 extends Phaser.Scene {
 
     win_script() {
 
-        this.registry.set('enemy1_defeated', true);
+        this.registry.set('enemy3_defeated', true);
+        this.scene.stop();
         this.scene.start('Scene8');
     }
 

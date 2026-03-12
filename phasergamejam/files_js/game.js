@@ -1,5 +1,5 @@
 
-
+import Scene15 from './scene15.js';
 import Scene14 from './scene14.js';
 import Scene13 from './scene13.js';
 import Scene12 from './scene12.js';
@@ -32,7 +32,7 @@ const config = {
     },
   width: 800,
   height: 600,
-  scene: [Scene1,Scene2,Scene3,Scene4,Scene5,Scene6,Scene7,Scene8,Scene9,Scene10,Scene11,Scene12,Scene13,Scene14]
+  scene: [Scene1,Scene2,Scene3,Scene4,Scene5,Scene6,Scene7,Scene8,Scene9,Scene10,Scene11,Scene12,Scene13,Scene14,Scene15]
 };
 
 new Phaser.Game(config);

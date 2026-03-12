@@ -36,29 +36,31 @@ export default class Scene10 extends Phaser.Scene {
     preload() {
 
         // TILEMAP (un solo file con ground + walls)
-        this.load.tilemapTiledJSON('map3', 'phasergamejam/assets/scene10/tile_map/map.json');
+        this.load.tilemapTiledJSON('map3', '/assets/scene10/tile_map/map.json');
 
         // TILESET
-        this.load.image('tiles3', 'phasergamejam/assets/scene10/tile_map/spritesheet.png');
+        this.load.image('tiles3', '/assets/scene10/tile_map/spritesheet.png');
 
 
         // PLAYER + SPRITES
-        this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
+        this.load.image('player', '/assets/scene3/scene3_player.png');
 
-        this.load.image('upwalk_frame1', 'phasergamejam/assets/scene3/scene3_upwalking_frame1.png');
-        this.load.image('upwalk_frame2', 'phasergamejam/assets/scene3/scene3_upwalking_frame2.png');
-        this.load.image('upwalk_frame3', 'phasergamejam/assets/scene3/scene3_upwalking_frame3.png');
+        this.load.image('upwalk_frame1', '/assets/scene3/scene3_upwalking_frame1.png');
+        this.load.image('upwalk_frame2', '/assets/scene3/scene3_upwalking_frame2.png');
+        this.load.image('upwalk_frame3', '/assets/scene3/scene3_upwalking_frame3.png');
 
-        this.load.image('leftwalk_frame1', 'phasergamejam/assets/scene3/scene3_leftwalking_frame1.png');
-        this.load.image('leftwalk_frame2', 'phasergamejam/assets/scene3/scene3_leftwalking_frame2.png');
+        this.load.image('leftwalk_frame1', '/assets/scene3/scene3_leftwalking_frame1.png');
+        this.load.image('leftwalk_frame2', '/assets/scene3/scene3_leftwalking_frame2.png');
 
-        this.load.image('rightwalk_frame1', 'phasergamejam/assets/scene3/scene3_rightwalking_frame1.png');
-        this.load.image('rightwalk_frame2', 'phasergamejam/assets/scene3/scene3_rightwalking_frame2.png');
+        this.load.image('rightwalk_frame1', '/assets/scene3/scene3_rightwalking_frame1.png');
+        this.load.image('rightwalk_frame2', '/assets/scene3/scene3_rightwalking_frame2.png');
 
-        this.load.image('downwalk_frame2', 'phasergamejam/assets/scene3/scene3_downwalking_frame2.png');
-        this.load.image('downwalk_frame3', 'phasergamejam/assets/scene3/scene3_downwalking_frame3.png');
+        this.load.image('downwalk_frame2', '/assets/scene3/scene3_downwalking_frame2.png');
+        this.load.image('downwalk_frame3', '/assets/scene3/scene3_downwalking_frame3.png');
 
-        this.load.image('npc', 'phasergamejam/assets/scene8/monster_player.png');
+
+        // enemy 4
+        this.load.image('enemy4_frame1', '/assets/scene10/enemy4_frame1.png');
     }
 
     create() {
@@ -95,7 +97,7 @@ export default class Scene10 extends Phaser.Scene {
 
         // NPC
 
-        this.npc = this.physics.add.staticSprite(this.npc_x, this.npc_y, 'npc');
+        this.npc = this.physics.add.staticSprite(this.npc_x, this.npc_y, 'enemy4_frame1').setFlipX(true);
 
 
 
@@ -160,6 +162,19 @@ export default class Scene10 extends Phaser.Scene {
             repeat: -1
         });
 
+        if (this.registry.get('scene11_npc_defeated')) {
+            this.npc.destroy();
+            this.event_triggered = true;
+            this.player.x = this.registry.get('scene10_player_x');
+            this.player.y = this.registry.get('scene10_player_y');
+        } else {
+            this.event_triggered = false;
+        }
+
+        if (!this.registry.get('is_player_human')) {
+            this.player.setTexture('monster_player_downwalking_frame1');
+        }
+
     }
 
     update() {
@@ -176,7 +191,7 @@ export default class Scene10 extends Phaser.Scene {
             this.event_triggered = true; // blocca chiamate successive
         }
 
-        if(this.player.x > 111*16){
+        if (this.player.x > 111 * 16) {
             this.scene.start('Scene12');
         }
     }
@@ -228,12 +243,22 @@ export default class Scene10 extends Phaser.Scene {
         }
 
 
+        if (!this.registry.get('is_player_human')) {
+            anim = 'monster_' + anim;
+        }
+
+
         if (anim) {
             if (this.player.anims.currentAnim?.key !== anim) {
+
                 this.player.anims.play(anim);
             }
         } else {
-            this.player.anims.play('stand', true);
+            if (this.registry.get('is_player_human')) {
+                this.player.anims.play('stand', true);
+            } else {
+                this.player.anims.play('monster_stand', true);
+            }
         }
 
 
@@ -302,6 +327,9 @@ export default class Scene10 extends Phaser.Scene {
             this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
             this.playerspeed = 120;
             this.is_camera_moving = true;
+
+            this.player.x = this.registry.set('scene10_player_x', this.player.x);
+            this.player.y = this.registry.set('scene10_player_y', this.player.y);
 
             this.scene.start('Scene11');
 
