@@ -61,11 +61,11 @@ export default class Scene11 extends Phaser.Scene {
 
     preload() {
 
-        this.load.image('player', '/assets/scene8/monster_player.png');
-        this.load.image('bullet', '/assets/scene4/scene4_bullet1.png');
-        this.load.image('attack', '/assets/scene4/scene4_bullet1.png');
-        this.load.image('player_slash', '/assets/scene11/player_slash.png');
-        this.load.image('player_soul', '/assets/scene4/scene4_player_shield.png')
+        this.load.image('player', 'phasergamejam/assets/scene8/monster_player.png');
+        this.load.image('bullet', 'phasergamejam/assets/scene4/scene4_bullet1.png');
+        this.load.image('attack', 'phasergamejam/assets/scene4/scene4_bullet1.png');
+        this.load.image('player_slash', 'phasergamejam/assets/scene11/player_slash.png');
+        this.load.image('player_soul', 'phasergamejam/assets/scene4/scene4_player_shield.png')
     }
 
     create() {

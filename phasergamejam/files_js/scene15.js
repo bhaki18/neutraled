@@ -103,34 +103,20 @@ export default class Scene15 extends Phaser.Scene {
 
     preload() {
 
-        // PLAYER + SPRITES
-        this.load.image('player', '/assets/scene3/scene3_player.png');
-
-        this.load.image('upwalk_frame1', '/assets/scene3/scene3_upwalking_frame1.png');
-        this.load.image('upwalk_frame2', '/assets/scene3/scene3_upwalking_frame2.png');
-        this.load.image('upwalk_frame3', '/assets/scene3/scene3_upwalking_frame3.png');
-
-        this.load.image('leftwalk_frame1', '/assets/scene3/scene3_leftwalking_frame1.png');
-        this.load.image('leftwalk_frame2', '/assets/scene3/scene3_leftwalking_frame2.png');
-
-        this.load.image('rightwalk_frame1', '/assets/scene3/scene3_rightwalking_frame1.png');
-        this.load.image('rightwalk_frame2', '/assets/scene3/scene3_rightwalking_frame2.png');
-
-        this.load.image('downwalk_frame2', '/assets/scene3/scene3_downwalking_frame2.png');
-        this.load.image('downwalk_frame3', '/assets/scene3/scene3_downwalking_frame3.png');
+       
 
         // sfondo
 
-        this.load.image('background', '/assets/scene15/background.png');
-        this.load.image('background_wc', '/assets/scene15/background_with_castle.png');
-        this.load.image('sky', '/assets/scene1/scene1_background_sky.png');
+        this.load.image('background', 'phasergamejam/assets/scene15/background.png');
+        this.load.image('background_wc', 'phasergamejam/assets/scene15/background_with_castle.png');
+        this.load.image('sky', 'phasergamejam/assets/scene1/scene1_background_sky.png');
 
         // tifone
 
-        this.load.image('tifone_frame1', '/assets/scene15/tifone_frame1.png');
+        this.load.image('tifone_frame1', 'phasergamejam/assets/scene15/tifone_frame1.png');
 
         // attacchi
-        this.load.image('bullets', '/assets/scene4/scene4_bullet1.png');
+        this.load.image('bullets', 'phasergamejam/assets/scene4/scene4_bullet1.png');
 
     }
 
