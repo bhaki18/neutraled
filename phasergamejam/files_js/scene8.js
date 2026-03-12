@@ -61,6 +61,22 @@ export default class Scene8 extends Phaser.Scene {
         this.load.image('tiles2', 'phasergamejam/assets/scene8/tile_map/spritesheet.png');
 
 
+        // PLAYER + SPRITES
+        this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
+
+        this.load.image('upwalk_frame1', 'phasergamejam/assets/scene3/scene3_upwalking_frame1.png');
+        this.load.image('upwalk_frame2', 'phasergamejam/assets/scene3/scene3_upwalking_frame2.png');
+        this.load.image('upwalk_frame3', 'phasergamejam/assets/scene3/scene3_upwalking_frame3.png');
+
+        this.load.image('leftwalk_frame1', 'phasergamejam/assets/scene3/scene3_leftwalking_frame1.png');
+        this.load.image('leftwalk_frame2', 'phasergamejam/assets/scene3/scene3_leftwalking_frame2.png');
+
+        this.load.image('rightwalk_frame1', 'phasergamejam/assets/scene3/scene3_rightwalking_frame1.png');
+        this.load.image('rightwalk_frame2', 'phasergamejam/assets/scene3/scene3_rightwalking_frame2.png');
+
+        this.load.image('downwalk_frame2', 'phasergamejam/assets/scene3/scene3_downwalking_frame2.png');
+        this.load.image('downwalk_frame3', 'phasergamejam/assets/scene3/scene3_downwalking_frame3.png');
+
         this.load.image('monster_player_stand_frame', 'phasergamejam/assets/scene8/monster_player.png');
 
         // enemy 3
@@ -108,8 +124,8 @@ export default class Scene8 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.npc1);
 
 
-        this.npc2 = this.physics.add.staticSprite(this.npc2_x, this.npc2_y, 'npc1');
-        this.physics.add.collider(this.player, this.npc2).setScale(0.5);
+        this.npc2 = this.physics.add.staticSprite(this.npc2_x, this.npc2_y, 'npc1').setScale(0.5);;
+        this.physics.add.collider(this.player, this.npc2)
 
 
 
