@@ -74,23 +74,22 @@ export default class Scene2 extends Phaser.Scene {
         this.oscillation_speed = 0.002;    // velocità oscillazione
     }
 
-    preload() {
-        this.load.image('space_background_frame1', 'phasergamejam/assets/scene2/scene2_space_background_frame1.png');
-        this.load.image('space_background_frame2', 'phasergamejam/assets/scene2/scene2_space_background_frame2.png');
-
-        this.load.image('secret_character', 'phasergamejam/assets/scene2/scene2_secret_character.png');
-
-        this.load.audio('secret_character_talking_sound', 'phasergamejam/assets/scene2/scene2_secret_character_talking_sound.mp3');
-    }
+    
 
     create() {
+        this.scene.stop('SceneUI');
+
+
+        
+    
+
 
         this.registry.set('is_player_human',true);
 
 
         this.backgroud = this.add.sprite(0, 50, 'space_background_frame1').setDepth(1).setScale(8).setOrigin(0);
 
-        this.anims.create({
+        if (!this.anims.exists('skyanimation')) this.anims.create({
             key: 'skyanimation',
             frames: [
                 { key: 'space_background_frame1' },
@@ -107,7 +106,10 @@ export default class Scene2 extends Phaser.Scene {
         this.secret_character_talking_obj = this.add.text(this.secret_character_talking_obj_x, this.secret_character_talking_obj_y, '', {
             fontFamily: '"Press Start 2P",monospace',
             fontSize: '18px',
-            color: '#ffff00',
+            color: '#ffff00', 
+            fontFamily: 'Courier, monospace',
+            stroke: '#000000',
+            strokeThickness: 4,
             wordWrap: { width: 600 }
         }).setDepth(5).setOrigin(0);
 

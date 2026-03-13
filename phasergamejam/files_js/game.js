@@ -1,4 +1,4 @@
-
+import ScenePreload from './scene_preload.js';
 import Scene15 from './scene15.js';
 import Scene14 from './scene14.js';
 import Scene13 from './scene13.js';
@@ -14,6 +14,10 @@ import Scene4 from './scene4.js';
 import { Scene3 } from './scene3.js';
 import Scene2 from './scene2.js';
 import Scene1 from './scene1.js';
+import SceneGameOver from './scene_gameover.js';
+import SceneVictory from './scene_victory.js';
+import SceneGameWin from './scene_gamewin.js';
+import SceneUI from './scene_ui.js';
 
 
 const config = {
@@ -32,7 +36,7 @@ const config = {
     },
   width: 800,
   height: 600,
-  scene: [Scene1,Scene2,Scene3,Scene4,Scene5,Scene6,Scene7,Scene8,Scene9,Scene10,Scene11,Scene12,Scene13,Scene14,Scene15],
+  scene: [ScenePreload,Scene1,Scene2,Scene3,Scene4,Scene5,Scene6,Scene7,Scene8,Scene9,Scene10,Scene11,Scene12,Scene13,Scene14,Scene15,SceneGameOver,SceneVictory,SceneGameWin,SceneUI],
   fps: {
         target: 60,  // massimo FPS desiderato
         forceSetTimeOut: false // se true, usa setTimeout invece di requestAnimationFrame

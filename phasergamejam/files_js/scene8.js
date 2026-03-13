@@ -52,39 +52,18 @@ export default class Scene8 extends Phaser.Scene {
 
     }
 
-    preload() {
-
-        // TILEMAP (un solo file con ground + walls)
-        this.load.tilemapTiledJSON('map2', 'phasergamejam/assets/scene8/tile_map/map.json');
-
-        // TILESET
-        this.load.image('tiles2', 'phasergamejam/assets/scene8/tile_map/spritesheet.png');
-
-
-        // PLAYER + SPRITES
-        this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
-
-        this.load.image('upwalk_frame1', 'phasergamejam/assets/scene3/scene3_upwalking_frame1.png');
-        this.load.image('upwalk_frame2', 'phasergamejam/assets/scene3/scene3_upwalking_frame2.png');
-        this.load.image('upwalk_frame3', 'phasergamejam/assets/scene3/scene3_upwalking_frame3.png');
-
-        this.load.image('leftwalk_frame1', 'phasergamejam/assets/scene3/scene3_leftwalking_frame1.png');
-        this.load.image('leftwalk_frame2', 'phasergamejam/assets/scene3/scene3_leftwalking_frame2.png');
-
-        this.load.image('rightwalk_frame1', 'phasergamejam/assets/scene3/scene3_rightwalking_frame1.png');
-        this.load.image('rightwalk_frame2', 'phasergamejam/assets/scene3/scene3_rightwalking_frame2.png');
-
-        this.load.image('downwalk_frame2', 'phasergamejam/assets/scene3/scene3_downwalking_frame2.png');
-        this.load.image('downwalk_frame3', 'phasergamejam/assets/scene3/scene3_downwalking_frame3.png');
-
-        this.load.image('monster_player_stand_frame', 'phasergamejam/assets/scene8/monster_player.png');
-
-        // enemy 3
-        this.load.image('enemy3_frame1', 'phasergamejam/assets/scene8/enemy3_frame1.png')
-
-    }
+    
 
     create() {
+
+        
+        if (!this.scene.isActive('SceneUI')) {
+            this.scene.launch('SceneUI');
+        }
+        this.scene.bringToTop('SceneUI');
+    
+    
+
 
         //INPUT
         this.keys = this.input.keyboard.addKeys({
@@ -150,7 +129,7 @@ export default class Scene8 extends Phaser.Scene {
 
         // ===== ANIMAZIONI =====
 
-        this.anims.create({
+        if (!this.anims.exists('upwalk')) this.anims.create({
             key: 'upwalk',
             frames: [
                 { key: 'upwalk_frame1' },
@@ -162,7 +141,7 @@ export default class Scene8 extends Phaser.Scene {
             repeat: -1
         });
 
-        this.anims.create({
+        if (!this.anims.exists('leftwalk')) this.anims.create({
             key: 'leftwalk',
             frames: [
                 { key: 'leftwalk_frame1' },
@@ -172,7 +151,7 @@ export default class Scene8 extends Phaser.Scene {
             repeat: -1
         });
 
-        this.anims.create({
+        if (!this.anims.exists('rightwalk')) this.anims.create({
             key: 'rightwalk',
             frames: [
                 { key: 'rightwalk_frame1' },
@@ -182,7 +161,7 @@ export default class Scene8 extends Phaser.Scene {
             repeat: -1
         });
 
-        this.anims.create({
+        if (!this.anims.exists('walk')) this.anims.create({
             key: 'walk',
             frames: [
                 { key: 'player' },
@@ -193,14 +172,14 @@ export default class Scene8 extends Phaser.Scene {
             repeat: -1
         });
 
-        this.anims.create({
+        if (!this.anims.exists('stand')) this.anims.create({
             key: 'stand',
             frames: [{ key: 'player' }],
             frameRate: 6,
             repeat: -1
         });
 
-        this.anims.create({
+        if (!this.anims.exists('monster_player_stand')) this.anims.create({
             key: 'monster_player_stand',
             frames: [{
                 key: 'monster_player_stand_frame'
@@ -220,8 +199,6 @@ export default class Scene8 extends Phaser.Scene {
         if (!this.registry.get('is_player_human')) {
             this.player.setTexture('monster_player_downwalking_frame1');
         }
-
-
     }
 
     update() {
@@ -370,7 +347,10 @@ export default class Scene8 extends Phaser.Scene {
                 this.guide_text_string[this.dialogueIndex],
                 {
                     fontSize: '20px',
-                    color: '#ffffff',
+                    color: '#ffffff', 
+            fontFamily: 'Courier, monospace',
+            stroke: '#000000',
+            strokeThickness: 4,
                     align: 'center',
                     wordWrap: { width: 280 }
                 }
@@ -413,7 +393,10 @@ export default class Scene8 extends Phaser.Scene {
                 this.guide_text_string1[this.dialogueIndex],
                 {
                     fontSize: '20px',
-                    color: '#ffffff',
+                    color: '#ffffff', 
+            fontFamily: 'Courier, monospace',
+            stroke: '#000000',
+            strokeThickness: 4,
                     align: 'center',
                     wordWrap: { width: 280 }
                 }

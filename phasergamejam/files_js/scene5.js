@@ -38,24 +38,21 @@ export class Scene5 extends Phaser.Scene {
         this.eventTriggered2 = false;
     }
 
-    preload() {
-
-        // TILEMAP (un solo file con ground + walls)
-        this.load.tilemapTiledJSON('map1', 'phasergamejam/assets/scene5/tile_map/map.json');
-
-        // TILESET
-        this.load.image('tiles1', 'phasergamejam/assets/scene5/tile_map/spritesheet.png');
-
-        // PLAYER + SPRITES
-        this.load.image('player', 'phasergamejam/assets/scene3/scene3_player.png');
-
-        //ENEMYS 
-        this.load.image('enemy1', 'phasergamejam/assets/scene5/npc1_frame1.png');
-        this.load.image('enemy2', 'phasergamejam/assets/scene5/enemy2_frame1.png');
-
-    }
+    
 
     create() {
+
+        
+        if (!this.scene.isActive('SceneUI')) {
+            this.scene.launch('SceneUI');
+        }
+        this.scene.bringToTop('SceneUI');
+    
+    
+
+
+        this.sound.stopAll();
+        this.sound.play('scene5_audio', { loop: true });
 
         //INPUT
         this.keys = this.input.keyboard.addKeys({
@@ -106,7 +103,7 @@ export class Scene5 extends Phaser.Scene {
 
         // ===== ANIMAZIONI =====
 
-        this.anims.create({
+        if (!this.anims.exists('upwalk')) this.anims.create({
             key: 'upwalk',
             frames: [
                 { key: 'upwalk_frame1' },
@@ -118,7 +115,7 @@ export class Scene5 extends Phaser.Scene {
             repeat: -1
         });
 
-        this.anims.create({
+        if (!this.anims.exists('leftwalk')) this.anims.create({
             key: 'leftwalk',
             frames: [
                 { key: 'leftwalk_frame1' },
@@ -128,7 +125,7 @@ export class Scene5 extends Phaser.Scene {
             repeat: -1
         });
 
-        this.anims.create({
+        if (!this.anims.exists('rightwalk')) this.anims.create({
             key: 'rightwalk',
             frames: [
                 { key: 'rightwalk_frame1' },
@@ -138,7 +135,7 @@ export class Scene5 extends Phaser.Scene {
             repeat: -1
         });
 
-        this.anims.create({
+        if (!this.anims.exists('walk')) this.anims.create({
             key: 'walk',
             frames: [
                 { key: 'player' },
@@ -149,9 +146,23 @@ export class Scene5 extends Phaser.Scene {
             repeat: -1
         });
 
-        this.anims.create({
+        if (!this.anims.exists('stand')) this.anims.create({
             key: 'stand',
             frames: [{ key: 'player' }],
+            frameRate: 6,
+            repeat: -1
+        });
+
+        if (!this.anims.exists('enemy1_idle')) this.anims.create({
+            key: 'enemy1_idle',
+            frames: this.anims.generateFrameNumbers('enemy1', { start: 0, end: 5 }),
+            frameRate: 6,
+            repeat: -1
+        });
+
+        if (!this.anims.exists('enemy2_idle')) this.anims.create({
+            key: 'enemy2_idle',
+            frames: this.anims.generateFrameNumbers('enemy2', { start: 0, end: 8 }),
             frameRate: 6,
             repeat: -1
         });
@@ -175,11 +186,17 @@ export class Scene5 extends Phaser.Scene {
             this.enemy1.destroy();
         } else {
             this.eventTriggered1 = false;
+            if (this.enemy1.active) {
+                this.enemy1.play('enemy1_idle');
+            }
         }
         if (this.registry.get('enemy2_defeated')) {
             this.enemy2.destroy();
         } else {
             this.eventTriggered2 = false;
+            if (this.enemy2.active) {
+                this.enemy2.play('enemy2_idle');
+            }
         }
 
         if (!this.registry.get('is_player_human')) {
@@ -319,7 +336,10 @@ export class Scene5 extends Phaser.Scene {
                 this.guide_text_string[this.dialogueIndex],
                 {
                     fontSize: '20px',
-                    color: '#ffffff',
+                    color: '#ffffff', 
+            fontFamily: 'Courier, monospace',
+            stroke: '#000000',
+            strokeThickness: 4,
                     align: 'center',
                     wordWrap: { width: 280 }
                 }
@@ -362,7 +382,10 @@ export class Scene5 extends Phaser.Scene {
                 this.guide_text_string[this.dialogueIndex],
                 {
                     fontSize: '20px',
-                    color: '#ffffff',
+                    color: '#ffffff', 
+            fontFamily: 'Courier, monospace',
+            stroke: '#000000',
+            strokeThickness: 4,
                     align: 'center',
                     wordWrap: { width: 280 }
                 }

@@ -55,6 +55,7 @@ export default class Scene1 extends Phaser.Scene {
 
         // variabili globali
         this.registry.set('is_player_human', true);
+        this.registry.set('player_level', 1);
 
 
 
@@ -126,23 +127,15 @@ export default class Scene1 extends Phaser.Scene {
         this.title_y = this.worldHeight / 5;
     }
 
-    preload() {
-        this.load.image('background_sky', 'phasergamejam/assets/scene1/scene1_background_sky.png');
-
-        for (let i = 1; i <= 10; i++) {
-            this.load.image(`background_cloud${i}`, `phasergamejam/assets/scene1/scene1_background_cloud${i}.png`);
-        }
-
-        for (let i = 1; i <= 3; i++) {
-            this.load.image(`secret_character_frame${i}`, `phasergamejam/assets/scene1/scene1_secret_character_frame${i}.png`);
-            this.load.image(`play_button_frame${i}`, `phasergamejam/assets/scene1/scene1_play_button_frame${i}.png`);
-            this.load.image(`option_button_frame${i}`, `phasergamejam/assets/scene1/scene1_option_button_frame${i}.png`);
-        }
-
-        this.load.image('title', 'phasergamejam/assets/scene1/scene1_title.png');
-    }
+    
 
     create() {
+        this.scene.stop('SceneUI');
+
+
+        
+    
+
         this.keys = this.input.keyboard.addKeys({ lmb: Phaser.Input.Keyboard.KeyCodes.LEFT });
 
         this.add.image(0, 0, 'background_sky').setScale(1.6).setDepth(1);
@@ -151,7 +144,7 @@ export default class Scene1 extends Phaser.Scene {
             this[`cloud${i}`] = this.add.image(this[`cloud${i}_x`], this[`cloud${i}_y`], `background_cloud${i}`).setDepth(2).setScale(i >= 8 ? 2 : 1.5).setOrigin(0);
         }
 
-        this.anims.create({
+        if (!this.anims.exists('flymoving')) this.anims.create({
             key: 'flymoving',
             frames: [
                 { key: 'secret_character_frame1' },
@@ -168,7 +161,7 @@ export default class Scene1 extends Phaser.Scene {
 
         this.play_button = this.add.sprite(this.play_button_x, this.play_button_y, 'play_button_frame1').setDepth(3).setOrigin(0.5);
 
-        this.anims.create({
+        if (!this.anims.exists('play_button_pressed')) this.anims.create({
             key: 'play_button_pressed',
             frames: [
                 { key: 'play_button_frame1' },
@@ -179,7 +172,7 @@ export default class Scene1 extends Phaser.Scene {
             repeat: 0
         });
 
-        this.anims.create({
+        if (!this.anims.exists('play_button_depressed')) this.anims.create({
             key: 'play_button_depressed',
             frames: [
                 { key: 'play_button_frame3' },
@@ -192,7 +185,7 @@ export default class Scene1 extends Phaser.Scene {
 
         this.option_button = this.add.sprite(this.option_button_x, this.option_button_y, 'option_button_frame1').setDepth(3).setOrigin(0.5).setScale(1);
 
-        this.anims.create({
+        if (!this.anims.exists('option_button_pressed')) this.anims.create({
             key: 'option_button_pressed',
             frames: [
                 { key: 'option_button_frame1' },
@@ -203,7 +196,7 @@ export default class Scene1 extends Phaser.Scene {
             repeat: 0
         });
 
-        this.anims.create({
+        if (!this.anims.exists('option_button_depressed')) this.anims.create({
             key: 'option_button_depressed',
             frames: [
                 { key: 'option_button_frame3' },
@@ -290,6 +283,16 @@ export default class Scene1 extends Phaser.Scene {
         ) {
             this.scene.start('Scene2');
         }
-    }
 
+        // clicca Option per lanciare la Multiplayer Arena
+        if (
+            this.mouse.x > this.option_button.x - this.option_button.width / 2 &&
+            this.mouse.x < this.option_button.x + this.option_button.width / 2 &&
+            this.mouse.y > this.option_button.y - this.option_button.height / 2 &&
+            this.mouse.y < this.option_button.y + this.option_button.height / 2 &&
+            this.mouse.isDown
+        ) {
+            window.location.href = 'http://localhost:5173';
+        }
+    }
 }
