@@ -45,12 +45,12 @@ export default class ScenePreload extends Phaser.Scene {
         // === SCENE 1 ===
         this.load.image('background_sky', 'assets/scene1/scene1_background_sky.png');
         for (let i = 1; i <= 10; i++) {
-            this.load.image(`background_cloud${i}`, `/assets/scene1/scene1_background_cloud${i}.png`);
+            this.load.image(`background_cloud${i}`, `assets/scene1/scene1_background_cloud${i}.png`);
         }
         for (let i = 1; i <= 3; i++) {
-            this.load.image(`secret_character_frame${i}`, `/assets/scene1/scene1_secret_character_frame${i}.png`);
-            this.load.image(`play_button_frame${i}`, `/assets/scene1/scene1_play_button_frame${i}.png`);
-            this.load.image(`option_button_frame${i}`, `/assets/scene1/scene1_option_button_frame${i}.png`);
+            this.load.image(`secret_character_frame${i}`, `assets/scene1/scene1_secret_character_frame${i}.png`);
+            this.load.image(`play_button_frame${i}`, `assets/scene1/scene1_play_button_frame${i}.png`);
+            this.load.image(`option_button_frame${i}`, `assets/scene1/scene1_option_button_frame${i}.png`);
         }
         this.load.image('title', 'assets/scene1/scene1_title.png');
 
