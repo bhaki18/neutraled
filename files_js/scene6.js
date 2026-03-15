@@ -418,6 +418,8 @@ export default class Scene6 extends Phaser.Scene {
             );
 
             this.time.delayedCall(2000, () => {
+                this.registry.set('player_level', 2);
+                
 
                 this.registry.set(
                     "enemy1_defeated",
@@ -437,12 +439,12 @@ export default class Scene6 extends Phaser.Scene {
 
         if(this.hp>0){
         this.registry.set('enemy1_defeated',true); 
-        this.registry.set('player_level', (this.registry.get('player_level') || 1) + 1);
+        this.registry.set('player_level', 2);
         this.scene.start('Scene5');
         }else {
             this.registry.set('enemy1_defeated',false);
             this.scene.stop();
-        this.scene.start('Scene5');
+            this.scene.start('SceneGameOver', { returnScene: 'Scene6' });
         }
      }
 

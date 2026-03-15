@@ -1,3 +1,4 @@
+import Phaser from 'phaser';
 import MenuScene from './MenuScene.js';
 import WaitingRoomScene from './WaitingRoomScene.js';
 import GameScene from './GameScene.js';
@@ -25,7 +26,7 @@ import SceneCredits from './SceneCredits.js';
 
 
 
-import { SerialBridgePlugin } from './lib joystick/SerialBridgePlugin.js';
+import { SerialBridgePlugin } from './lib joystick/SerialBridgePlugin.ts';
 
 const config = {
   type: Phaser.AUTO,

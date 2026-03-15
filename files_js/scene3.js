@@ -1,5 +1,5 @@
 
-export class Scene3 extends Phaser.Scene {
+export default class Scene3 extends Phaser.Scene {
 
     constructor() {
         super('Scene3');
@@ -47,19 +47,18 @@ export class Scene3 extends Phaser.Scene {
 
     }
 
-    
+
 
     create() {
 
-        
+
         if (!this.scene.isActive('SceneUI')) {
             this.scene.launch('SceneUI');
         }
         this.scene.bringToTop('SceneUI');
-    
-    
 
-
+        this.sound.stopAll();
+        this.sound.play('scene3_audio', { loop: true });
 
         // input
         this.keys = this.input.keyboard.addKeys({
@@ -476,10 +475,10 @@ export class Scene3 extends Phaser.Scene {
                 this.guide_text_string[this.dialogueIndex],
                 {
                     fontSize: '20px',
-                    color: '#ffffff', 
-            fontFamily: 'Courier, monospace',
-            stroke: '#000000',
-            strokeThickness: 4,
+                    color: '#ffffff',
+                    fontFamily: 'Courier, monospace',
+                    stroke: '#000000',
+                    strokeThickness: 4,
                     align: 'center',
                     wordWrap: { width: 280 }
                 }
@@ -589,22 +588,22 @@ export class Scene3 extends Phaser.Scene {
         // 2️⃣ UI ELEMENTS (prima li creiamo)
         this.dialogBox = this.add.rectangle(
             this.scale.width / 2,
-            this.scale.height - 60,
+            this.scale.height - 80,
             this.scale.width - 40,
-            40,
+            120,
             0x000000
         ).setOrigin(0.5);
 
         this.dialogText = this.add.text(
             this.scale.width / 2,
-            this.scale.height - 60,
+            this.scale.height - 80,
             "segui il sentiero",
             {
                 fontSize: '20px',
-                color: '#ffffff', 
-            fontFamily: 'Courier, monospace',
-            stroke: '#000000',
-            strokeThickness: 4,
+                color: '#ffffff',
+                fontFamily: 'Courier, monospace',
+                stroke: '#000000',
+                strokeThickness: 4,
                 align: 'center',
                 wordWrap: { width: this.scale.width - 80 }
             }

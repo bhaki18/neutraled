@@ -40,12 +40,12 @@ export default class Scene15 extends Phaser.Scene {
         this.player_damage = 1;
         this.tifone_damage = 5;
         this.phase0_tifone_attackrate = 300;//ms
-        this.phase1_tifone_attackrate = 500;// ms
-        this.phase2_tifone_attackrate = 5000 // ms
+        this.phase1_tifone_attackrate = 400;// ms
+        this.phase2_tifone_attackrate = 4000 // ms
         this.phase3_tifone_attackrate = this.phase2_tifone_attackrate * 2// in ms
-        this.phase4_tifone_attackrate = 300; //ms
-        this.phase5_tifone_attackrate = 3000; //ms
-        this.phase6_tifone_attackrate = 1000; //ms
+        this.phase4_tifone_attackrate = 250; //ms
+        this.phase5_tifone_attackrate = 2000; //ms
+        this.phase6_tifone_attackrate = 700; //ms
         this.nextPlayerShot = 0;
 
 
@@ -184,22 +184,22 @@ export default class Scene15 extends Phaser.Scene {
 
         //
 
+        const playerBarMaxWidth = this.player.width + 15;
         this.player_hp_red_bar = this.add.rectangle(
-            this.player.x - (this.max_hp * 4) / 2,
+            this.player.x - playerBarMaxWidth / 2,
             this.player.y - 20,
-            this.max_hp * 4,
+            playerBarMaxWidth,
             5,
             0xff0000
         ).setDepth(10 - 2).setOrigin(0, 0.5).setVisible(false);
 
         this.player_hp_green_bar = this.add.rectangle(
-            this.player.x - (this.max_hp * 4) / 2,
+            this.player.x - playerBarMaxWidth / 2,
             this.player.y - 20,
-            this.max_hp * 4,
+            playerBarMaxWidth,
             5,
             0x00ff00
         ).setDepth(10 - 2).setOrigin(0, 0.5).setVisible(false);
-
 
         this.tifone_hp_red_bar = this.add.rectangle(
             this.tifone.x - 100, // 200 hp * 2 width = 400 total. Wait, max hp is 100 for tifone, but 200 health text. Let's make it shift by 100.
@@ -1209,6 +1209,7 @@ export default class Scene15 extends Phaser.Scene {
 
 
     handle_player_attacks() {
+        if (!this.can_player_move) return;
 
         if (Phaser.Input.Keyboard.JustDown(this.enterKey)) {
 
@@ -1231,26 +1232,33 @@ export default class Scene15 extends Phaser.Scene {
     }
 
     handle_hp_bars() {
+        const playerBarMaxWidth = this.player.width + 15;
         this.player_hp_green_bar.y = this.player.y - 20;
         this.player_hp_red_bar.y = this.player.y - 20;
 
-        this.player_hp_green_bar.x = this.player.x - (this.max_hp * 4) / 2;
-        this.player_hp_red_bar.x = this.player.x - (this.max_hp * 4) / 2;
+        this.player_hp_green_bar.x = this.player.x - playerBarMaxWidth / 2;
+        this.player_hp_red_bar.x = this.player.x - playerBarMaxWidth / 2;
 
+        this.player_hp_red_bar.width = playerBarMaxWidth;
+        this.player_hp_red_bar.geom.width = playerBarMaxWidth;
+        this.player_hp_red_bar.setSize(playerBarMaxWidth, 5);
+
+        if(this.tifone){
         this.tifone_hp_red_bar.y = this.tifone.y - 200;
         this.tifone_hp_green_bar.y = this.tifone.y - 200;
         this.tifone_hp_red_bar.x = this.tifone.x - 100;
         this.tifone_hp_green_bar.x = this.tifone.x - 100;
 
+        }
 
 
         const pLevel = this.registry.get('player_level') || 1;
         this.max_hp = this.base_max_hp * pLevel;
 
         const pct = this.player_hp / this.max_hp;
-        let cWidth = (4 * this.max_hp) * pct; // Match constructor multiplier (this.player_hp * 4)
+        let cWidth = playerBarMaxWidth * pct;
         if (cWidth < 0) cWidth = 0;
-        this.player_hp_green_bar.width = cWidth;
+        this.player_hp_green_bar.width = cWidth ;
         this.player_hp_green_bar.geom.width = cWidth;
         this.player_hp_green_bar.setSize(cWidth, 5);
         this.player_hp_green_bar.updateDisplayOrigin();
@@ -1284,6 +1292,10 @@ export default class Scene15 extends Phaser.Scene {
             if (this.tifone.y > 600) {
                 this.tifone.destroy();
                 this.tifone = null;
+                this.tifone_hp_red_bar.destroy();
+                this.tifone_hp_green_bar.destroy();
+                this.player_hp_green_bar.destroy();
+                this.player_hp_red_bar.destroy();
             }
         }
 
@@ -1304,7 +1316,7 @@ export default class Scene15 extends Phaser.Scene {
 
                     const dialogueBox = this.add.rectangle(400, 300, 700, 200, 0x000000).setOrigin(0.5).setDepth(15);
                     const dialogueBox_border = this.add.rectangle(400, 300, 680, 180).setStrokeStyle(2, 0xffffff).setOrigin(0.5).setDepth(16);
-                    const dialogue_text = [
+                    this.dialogue_text = [
                         'oh mio eroe',
                         'sei troppo aura',
                         'menomale che ci sei tu',
@@ -1312,9 +1324,9 @@ export default class Scene15 extends Phaser.Scene {
                         ...((this.registry.get('is_player_human') === false) ? ['(sei un mostro ma per me sei okay)'] : [])
                     ];
 
-                    let index_dialogue = 0;
+                    this.index_dialogue = 0;
 
-                    const dialogue_text_obj = this.add.text(400, 300, dialogue_text[index_dialogue], {
+                    this.dialogue_text_obj = this.add.text(400, 300, this.dialogue_text[this.index_dialogue], {
                         fontFamily: 'Courier, monospace',
                         fontSize: '32px',
                         color: '#ffffff',
@@ -1323,14 +1335,13 @@ export default class Scene15 extends Phaser.Scene {
                         align: 'center'
                     }).setOrigin(0.5).setDepth(17);
 
-                    this.input.keyboard.on('keydown-ENTER', () => {
-                        index_dialogue++;
-                        if (index_dialogue < dialogue_text.length) {
-                            dialogue_text_obj.setText(dialogue_text[index_dialogue]);
-                        } else {
-                            this.scene.start('SceneGameWin');
-                        }
-                    });
+                } else if (Phaser.Input.Keyboard.JustDown(this.enterKey)) {
+                    this.index_dialogue++;
+                    if (this.index_dialogue < this.dialogue_text.length) {
+                        this.dialogue_text_obj.setText(this.dialogue_text[this.index_dialogue]);
+                    } else {
+                        this.scene.start('SceneGameWin');
+                    }
                 }
 
             }
