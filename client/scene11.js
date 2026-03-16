@@ -61,17 +61,19 @@ export default class Scene11 extends Phaser.Scene {
     }
 
 
-    
+
 
     create() {
 
-        
+
+
+
         if (!this.scene.isActive('SceneUI')) {
             this.scene.launch('SceneUI');
         }
         this.scene.bringToTop('SceneUI');
-    
-    
+
+
 
         this.player_hp = 20;
         this.npc_hp = 70;
@@ -158,13 +160,13 @@ export default class Scene11 extends Phaser.Scene {
                 bullet.destroy();
 
                 this.player_hp -= (2 * (this.registry.get('player_level') || 1));
-                
-        const pct = this.player_hp / this.max_hp;
-        let cWidth = (20 * this.base_max_hp) * pct;
-        if(cWidth < 0) cWidth = 0;
-        this.player_hp_bar_green.setSize(cWidth, 30);
-        if(this.hpTextUI) this.hpTextUI.setText(`${this.player_hp>0?this.player_hp:0} / ${this.max_hp}`);
-    
+
+                const pct = this.player_hp / this.max_hp;
+                let cWidth = (20 * this.base_max_hp) * pct;
+                if (cWidth < 0) cWidth = 0;
+                this.player_hp_bar_green.setSize(cWidth, 30);
+                if (this.hpTextUI) this.hpTextUI.setText(`${this.player_hp > 0 ? this.player_hp : 0} / ${this.max_hp}`);
+
 
             },
             null,
@@ -193,7 +195,7 @@ export default class Scene11 extends Phaser.Scene {
                 npc.destroy();
                 this.npc_hp -= 2;
                 this.npc_hp_bar_green.setSize(this.moltiplicatore_hp_bar_npc * this.npc_hp, 30);
-                if(this.npcHpTextUI) this.npcHpTextUI.setText(`${this.npc_hp>0?this.npc_hp:0} / 70`);
+                if (this.npcHpTextUI) this.npcHpTextUI.setText(`${this.npc_hp > 0 ? this.npc_hp : 0} / 70`);
             },
             null,
             this
@@ -222,11 +224,11 @@ export default class Scene11 extends Phaser.Scene {
 
         const pLevel = this.registry.get('player_level') || 1;
         this.max_hp = this.base_max_hp * pLevel;
-        if(typeof this.hp !== 'undefined') this.hp = this.max_hp;
-        if(typeof this.player_hp !== 'undefined') this.player_hp = this.max_hp;
+        if (typeof this.hp !== 'undefined') this.hp = this.max_hp;
+        if (typeof this.player_hp !== 'undefined') this.player_hp = this.max_hp;
 
         this.hpTextUI = this.add.text(
-            200 + (20 * this.base_max_hp)/2, 
+            200 + (20 * this.base_max_hp) / 2,
             550 + 15,
             `${this.max_hp} / ${this.max_hp}`,
             {
@@ -237,7 +239,7 @@ export default class Scene11 extends Phaser.Scene {
                 strokeThickness: 4
             }
         ).setOrigin(0.5).setDepth(4);
-    
+
 
 
 
@@ -259,7 +261,7 @@ export default class Scene11 extends Phaser.Scene {
 
 
         this.npcHpTextUI = this.add.text(
-            this.npc_hp_bar_x + 200, 
+            this.npc_hp_bar_x + 200,
             this.npc_hp_bar_y + 15,
             `${this.npc_hp} / ${this.npc_hp}`,
             {
@@ -270,7 +272,7 @@ export default class Scene11 extends Phaser.Scene {
                 strokeThickness: 4
             }
         ).setOrigin(0.5).setDepth(4);
-        
+
 
         this.events.on('shutdown', () => {
 
@@ -279,6 +281,9 @@ export default class Scene11 extends Phaser.Scene {
             }
 
         });
+
+        this.sound.stopAll();
+        this.sound.play('scene11_audio', { loop: true });
     }
 
     update() {
@@ -341,9 +346,10 @@ export default class Scene11 extends Phaser.Scene {
             if (this.attack_timer) {
                 this.attack_timer.remove();
             }
+            this.sound.stopAll();
             this.scene.start('Scene10');
             this.scene.stop();
-            this.registry.set('scene11_npc_defeated', true); 
+            this.registry.set('scene11_npc_defeated', true);
             this.registry.set('player_level', (this.registry.get('player_level') || 1) + 1);
 
         }

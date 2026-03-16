@@ -38,7 +38,7 @@ export default class Scene15 extends Phaser.Scene {
         this.player_hp = 100;
         this.tifone_hp = 100;
         this.player_damage = 1;
-        this.tifone_damage = 5;
+        this.tifone_damage = 20;
         this.phase0_tifone_attackrate = 300;//ms
         this.phase1_tifone_attackrate = 400;// ms
         this.phase2_tifone_attackrate = 4000 // ms
@@ -241,7 +241,7 @@ export default class Scene15 extends Phaser.Scene {
             this.tifone_fireball_attacks,
             (attack, npc) => {
                 npc.destroy();
-                this.player_hp -= (1 * (this.registry.get('player_level') || 1));
+                this.player_hp -= (2 * (this.registry.get('player_level') || 1));
             },
             null,
             this
@@ -252,7 +252,7 @@ export default class Scene15 extends Phaser.Scene {
             this.tifone_wind_attacks,
             (attack, npc) => {
                 npc.destroy();
-                this.player_hp -= (1 * (this.registry.get('player_level') || 1));
+                this.player_hp -= (2 * (this.registry.get('player_level') || 1));
             },
             null,
             this
@@ -263,7 +263,7 @@ export default class Scene15 extends Phaser.Scene {
             this.tifone_wave_attack,
             (attack, npc) => {
                 npc.destroy();
-                this.player_hp -= (1 * (this.registry.get('player_level') || 1));
+                this.player_hp -= (2 * (this.registry.get('player_level') || 1));
             },
             null,
             this
@@ -274,7 +274,7 @@ export default class Scene15 extends Phaser.Scene {
             this.tifone_wave2_attack,
             (attack, npc) => {
                 npc.destroy();
-                this.player_hp -= (1 * (this.registry.get('player_level') || 1));
+                this.player_hp -= (2 * (this.registry.get('player_level') || 1));
             },
             null,
             this
@@ -285,7 +285,7 @@ export default class Scene15 extends Phaser.Scene {
             this.tifone_lighting_attack,
             (attack, npc) => {
                 npc.destroy();
-                this.player_hp -= (1 * (this.registry.get('player_level') || 1));
+                this.player_hp -= (2 * (this.registry.get('player_level') || 1));
             },
             null,
             this
@@ -294,7 +294,7 @@ export default class Scene15 extends Phaser.Scene {
             this.tifone_laser_attack,
             (attack, npc) => {
                 npc.destroy();
-                this.player_hp -= (1 * (this.registry.get('player_level') || 1));
+                this.player_hp -= (2 * (this.registry.get('player_level') || 1));
             },
             null,
             this
@@ -305,7 +305,7 @@ export default class Scene15 extends Phaser.Scene {
             this.tifone_lateral_wave_attack,
             (attack, npc) => {
                 npc.destroy();
-                this.player_hp -= (1 * (this.registry.get('player_level') || 1));
+                this.player_hp -= (2 * (this.registry.get('player_level') || 1));
             },
             null,
             this
@@ -316,7 +316,7 @@ export default class Scene15 extends Phaser.Scene {
             this.tifone_falling_clouds_attack,
             (attack, npc) => {
                 npc.destroy();
-                this.player_hp -= (1 * (this.registry.get('player_level') || 1));
+                this.player_hp -= (2 * (this.registry.get('player_level') || 1));
             },
             null,
             this
@@ -338,7 +338,7 @@ export default class Scene15 extends Phaser.Scene {
         this.start_animation_text_obj = this.add.text(
             this.start_animation_text_x,
             this.start_animation_text_y,
-            'auraaaaa'
+            ''
         ).setOrigin(0.5).setDepth(livello_di_profondita_max - 1);
 
 
@@ -1232,6 +1232,8 @@ export default class Scene15 extends Phaser.Scene {
     }
 
     handle_hp_bars() {
+        if (!this.player_hp_red_bar || !this.player_hp_red_bar.active) return;
+
         const playerBarMaxWidth = this.player.width + 15;
         this.player_hp_green_bar.y = this.player.y - 20;
         this.player_hp_red_bar.y = this.player.y - 20;
@@ -1243,11 +1245,11 @@ export default class Scene15 extends Phaser.Scene {
         this.player_hp_red_bar.geom.width = playerBarMaxWidth;
         this.player_hp_red_bar.setSize(playerBarMaxWidth, 5);
 
-        if(this.tifone){
-        this.tifone_hp_red_bar.y = this.tifone.y - 200;
-        this.tifone_hp_green_bar.y = this.tifone.y - 200;
-        this.tifone_hp_red_bar.x = this.tifone.x - 100;
-        this.tifone_hp_green_bar.x = this.tifone.x - 100;
+        if (this.tifone) {
+            this.tifone_hp_red_bar.y = this.tifone.y - 200;
+            this.tifone_hp_green_bar.y = this.tifone.y - 200;
+            this.tifone_hp_red_bar.x = this.tifone.x - 100;
+            this.tifone_hp_green_bar.x = this.tifone.x - 100;
 
         }
 
@@ -1258,7 +1260,7 @@ export default class Scene15 extends Phaser.Scene {
         const pct = this.player_hp / this.max_hp;
         let cWidth = playerBarMaxWidth * pct;
         if (cWidth < 0) cWidth = 0;
-        this.player_hp_green_bar.width = cWidth ;
+        this.player_hp_green_bar.width = cWidth;
         this.player_hp_green_bar.geom.width = cWidth;
         this.player_hp_green_bar.setSize(cWidth, 5);
         this.player_hp_green_bar.updateDisplayOrigin();
@@ -1269,6 +1271,10 @@ export default class Scene15 extends Phaser.Scene {
         this.tifone_hp_green_bar.setSize(this.tifone_hp * 2, 30);
         this.tifone_hp_green_bar.updateDisplayOrigin();
         if (this.npcHpTextUI) this.npcHpTextUI.setText(`${this.tifone_hp > 0 ? this.tifone_hp : 0} / 200`);
+
+        if (this.tifone_hp <= 0) {
+            this.tifone_hp_green_bar.width = 0;
+        }
     }
 
     handlelose() {
@@ -1279,17 +1285,19 @@ export default class Scene15 extends Phaser.Scene {
     }
 
     is_ending_animation() {
-        if(this.tifone_fireball_attacks) this.tifone_fireball_attacks.clear(true, true);
-        if(this.tifone_wind_attacks) this.tifone_wind_attacks.clear(true, true);
-        if(this.tifone_wave_attack) this.tifone_wave_attack.clear(true, true);
-        if(this.tifone_wave2_attack) this.tifone_wave2_attack.clear(true, true);
-        if(this.tifone_lighting_attack) this.tifone_lighting_attack.clear(true, true);
-        if(this.tifone_laser_attack) this.tifone_laser_attack.clear(true, true);
-        if(this.tifone_lateral_wave_attack) this.tifone_lateral_wave_attack.clear(true, true);
-        if(this.tifone_falling_clouds_attack) this.tifone_falling_clouds_attack.clear(true, true);
+        if (this.tifone_fireball_attacks) this.tifone_fireball_attacks.clear(true, true);
+        if (this.tifone_wind_attacks) this.tifone_wind_attacks.clear(true, true);
+        if (this.tifone_wave_attack) this.tifone_wave_attack.clear(true, true);
+        if (this.tifone_wave2_attack) this.tifone_wave2_attack.clear(true, true);
+        if (this.tifone_lighting_attack) this.tifone_lighting_attack.clear(true, true);
+        if (this.tifone_laser_attack) this.tifone_laser_attack.clear(true, true);
+        if (this.tifone_lateral_wave_attack) this.tifone_lateral_wave_attack.clear(true, true);
+        if (this.tifone_falling_clouds_attack) this.tifone_falling_clouds_attack.clear(true, true);
+        this.can_player_move = false;
+        this.can_player_attack = false;
         if (this.tifone && this.tifone.active) {
             this.tifone.setVelocityY(30);
-            if (this.tifone.y > 600) {
+            if (this.tifone.y >= 600) {
                 this.tifone.destroy();
                 this.tifone = null;
                 this.tifone_hp_red_bar.destroy();
@@ -1300,15 +1308,15 @@ export default class Scene15 extends Phaser.Scene {
         }
 
         if (!this.tifone && !this.trilly) {
-            this.trilly = this.physics.add.sprite(900, this.player.y, 'trilly');
+            this.trilly = this.physics.add.sprite(900, this.player.y, 'trilly').setDepth(100);
         }
 
         if (this.trilly) {
-            const trillyspeed = -30
+            const trillyspeed = -60
             this.trilly.setVelocityX(trillyspeed);
             this.trilly.anims.play('trilly_leftwalk');
 
-            if (this.trilly.x > this.player.x + 40) {
+            if (this.trilly.x < this.player.x + 40) {
                 this.trilly.setVelocityX(0);
                 this.trilly.anims.play('trilly_stand');
                 if (!this.dialogueStarted) {
@@ -1317,11 +1325,12 @@ export default class Scene15 extends Phaser.Scene {
                     const dialogueBox = this.add.rectangle(400, 300, 700, 200, 0x000000).setOrigin(0.5).setDepth(15);
                     const dialogueBox_border = this.add.rectangle(400, 300, 680, 180).setStrokeStyle(2, 0xffffff).setOrigin(0.5).setDepth(16);
                     this.dialogue_text = [
-                        'oh mio eroe',
-                        'sei troppo aura',
-                        'menomale che ci sei tu',
-                        'ti amo',
-                        ...((this.registry.get('is_player_human') === false) ? ['(sei un mostro ma per me sei okay)'] : [])
+                        'oh fratello mio',
+                        'sei tu? finn?',
+                        'pensavo di averti perso',
+                        'ti prego andiamo a casa',
+                        '...sapevo che mi avresti salvata',
+                        'PERO HO AVUTO TANTA PAURA!'
                     ];
 
                     this.index_dialogue = 0;

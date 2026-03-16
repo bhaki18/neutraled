@@ -1,9 +1,20 @@
 export default class SceneGameWin extends Phaser.Scene {
     constructor() {
         super('SceneGameWin');
+        this.keys = null;
     }
 
     create() {
+
+        this.keys = this.input.keyboard.addKeys({
+            up: 'W',
+            down: 'S',
+            left: 'A',
+            right: 'D',
+            interact: 'ENTER'
+        });
+
+
         this.cameras.main.setBackgroundColor('#000000');
 
         if (this.scene.isActive('SceneUI')) {
@@ -25,10 +36,19 @@ export default class SceneGameWin extends Phaser.Scene {
             color: '#ffffff',
             stroke: '#000000',
             strokeThickness: 3,
-            align: 'center'
+            align: 'center',
+            wordWrap: { width: 600 }
         }).setOrigin(0.5);
 
-        this.input.keyboard.once('keydown-ENTER', () => {
+
+
+
+
+
+    }
+
+    update() {
+        if (this.keys.interact.isDown) {
             // Reset player level to 1 when returning to title
             this.registry.set('player_level', 1);
             this.registry.set('is_player_human', true);
@@ -36,7 +56,10 @@ export default class SceneGameWin extends Phaser.Scene {
             this.registry.set('scene11_npc_defeated', false);
             this.registry.set('scene13_npc_defeated', false);
             this.registry.set('enemy1_defeated', false);
-            this.scene.start('Scene1');
-        });
+            this.sound.stopAll();
+            this.scene.start('MenuScene');
+
+
+        }
     }
 }

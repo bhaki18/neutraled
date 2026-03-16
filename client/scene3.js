@@ -599,7 +599,7 @@ export default class Scene3 extends Phaser.Scene {
             this.scale.height - 80,
             "segui il sentiero",
             {
-                fontSize: '20px',
+                fontSize: '28px',
                 color: '#ffffff',
                 fontFamily: 'Courier, monospace',
                 stroke: '#000000',

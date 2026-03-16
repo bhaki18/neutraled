@@ -27,7 +27,9 @@ export default class Scene14 extends Phaser.Scene {
             'ma anche il tuo corpo',
             'e la tua mente',
             'sei sicuro di volerlo affrontare?',
-            'Oltrepassa questo sentiero e incontra il tuo destino.'
+            'Oltrepassa questo sentiero e incontra il tuo destino.',
+            'ma qualcuno legge davvero questi cartelli?',
+            'ho finito le frasi'
         ]
         this.dialogueIndex = 0;
 
@@ -126,7 +128,7 @@ export default class Scene14 extends Phaser.Scene {
                 fontFamily: 'Courier, monospace',
                 stroke: '#000000',
                 strokeThickness: 4,
-                wordWrap: { width: 500 }
+                wordWrap: { width: this.dialogueBox.width - 20 }
             }
         ).setScrollFactor(0).setDepth(11).setVisible(false).setOrigin(0.5);
 

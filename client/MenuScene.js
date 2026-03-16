@@ -10,6 +10,7 @@ export default class MenuScene extends Phaser.Scene {
     }
 
     create() {
+        this.sound.stopAll();
         this.createBackground();
         this.createMonsters();
         this.createTitle();

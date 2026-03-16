@@ -30,13 +30,13 @@ export default class Scene5 extends Phaser.Scene {
         this.dialogueIndex = 0;
         this.rect_for_textbox = null;
         this.guide_text_string1 = [
-            'chi va la!?', 
+            'chi va la!?',
             'non pensavo saresti arrivato fin qui vivo',
             'ma il tuo viaggio finirà adesso!'
         ];
         this.guide_text_string2 = [
-            'sei forte per essere umano', 
-            'ma non potrai mai sconfiggere il grande Tifone', 
+            'sei forte per essere umano',
+            'ma non potrai mai sconfiggere il grande Tifone',
             'fatti sotto!'
         ];
         this.eventTriggered1 = false;
@@ -334,9 +334,9 @@ export default class Scene5 extends Phaser.Scene {
 
             this.rect_for_textbox = this.add.rectangle(
                 this.enemy1_x,
-                this.enemy1_y + 100,
+                this.enemy1_y + 80,
                 300,
-                120,
+                100,
                 0x000000
             ).setOrigin(0.5).setStrokeStyle(2, 0xffffff);
 
@@ -380,9 +380,9 @@ export default class Scene5 extends Phaser.Scene {
 
             this.rect_for_textbox = this.add.rectangle(
                 this.enemy2_x,
-                this.enemy2_y + 100,
+                this.enemy2_y + 80,
                 300,
-                120,
+                100,
                 0x000000
             ).setOrigin(0.5).setStrokeStyle(2, 0xffffff);
 

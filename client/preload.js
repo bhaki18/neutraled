@@ -140,6 +140,7 @@ export default class Preload extends Phaser.Scene {
         this.load.image('attack', './scene4/scene4_bullet1.png');
         this.load.image('player_slash', './scene11/player_slash.png');
         this.load.image('player_soul', './scene4/scene4_player_shield.png');
+        this.load.audio('scene11_audio', './sounds/scene11_fightsoundtrack.mp3');
 
         // === SCENE 12 ===
         this.load.tilemapTiledJSON('map4', './scene12/tile_map/map.json');
@@ -159,6 +160,9 @@ export default class Preload extends Phaser.Scene {
         this.load.audio('scene14_audio', './sounds/scene14_soundtrack.mp3');
 
         // === SCENE 15 ===
+        this.load.image('trilly', './scene15/gmail-1.png.png');
+        this.load.image('trilly_walk1', './scene15/gmail.leftwalk_frame-1.png.png');
+        this.load.image('trilly_walk2', './scene15/gmail.leftwalk_frame2-1.png.png');
         this.load.image('background', './scene15/background.png');
         this.load.image('background_wc', './scene15/background_with_castle.png');
         this.load.image('sky', './scene1/scene1_background_sky.png');
@@ -407,6 +411,27 @@ export default class Preload extends Phaser.Scene {
             key: 'monster_stand',
             frames: [
                 { key: 'monster_player_downwalking_frame1' },
+            ],
+            frameRate: 6,
+            repeat: -1
+        });
+
+        if (!this.anims.exists('trilly_leftwalk')) this.anims.create({
+            key: 'trilly_leftwalk',
+            frames: [
+                { key: 'trilly_walk1' },
+                { key: 'trilly_walk1' },
+                { key: 'trilly_walk2' },
+                { key: 'trilly_walk2' }
+            ],
+            frameRate: 8,
+            repeat: -1
+        });
+
+        if (!this.anims.exists('trilly_stand')) this.anims.create({
+            key: 'trilly_stand',
+            frames: [
+                { key: 'trilly' },
             ],
             frameRate: 6,
             repeat: -1

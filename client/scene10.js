@@ -33,17 +33,20 @@ export default class Scene10 extends Phaser.Scene {
     }
 
 
-    
+
 
     create() {
 
-        
+        this.sound.stopAll();
+        this.sound.play('scene5_audio', { loop: true });
+
+
         if (!this.scene.isActive('SceneUI')) {
             this.scene.launch('SceneUI');
         }
         this.scene.bringToTop('SceneUI');
-    
-    
+
+
 
 
         //INPUT
@@ -288,9 +291,9 @@ export default class Scene10 extends Phaser.Scene {
 
             this.rect_for_textbox = this.add.rectangle(
                 this.npc_x,
-                this.npc_y + 50,
+                this.npc_y + 30,
                 300,
-                50,
+                70,
                 0x000000
             ).setOrigin(0.5).setStrokeStyle(2, 0xffffff);
 
@@ -300,10 +303,10 @@ export default class Scene10 extends Phaser.Scene {
                 this.guide_text_string[this.dialogueIndex],
                 {
                     fontSize: '20px',
-                    color: '#ffffff', 
-            fontFamily: 'Courier, monospace',
-            stroke: '#000000',
-            strokeThickness: 4,
+                    color: '#ffffff',
+                    fontFamily: 'Courier, monospace',
+                    stroke: '#000000',
+                    strokeThickness: 4,
                     align: 'center',
                     wordWrap: { width: 280 }
                 }

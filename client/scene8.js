@@ -62,6 +62,9 @@ export default class Scene8 extends Phaser.Scene {
 
     create() {
 
+        this.sound.stopAll();
+        this.sound.play('scene5_audio', { loop: true });
+
 
         if (!this.scene.isActive('SceneUI')) {
             this.scene.launch('SceneUI');
@@ -345,7 +348,7 @@ export default class Scene8 extends Phaser.Scene {
                 this.npc1_x,
                 this.npc1_y + 100,
                 300,
-                50,
+                70,
                 0x000000
             ).setOrigin(0.5).setStrokeStyle(2, 0xffffff);
 
@@ -391,7 +394,7 @@ export default class Scene8 extends Phaser.Scene {
                 this.npc2_x,
                 this.npc2_y + 100,
                 300,
-                50,
+                90,
                 0x000000
             ).setOrigin(0.5).setStrokeStyle(2, 0xffffff);
 
