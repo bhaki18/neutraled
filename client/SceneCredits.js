@@ -35,6 +35,7 @@ export default class SceneCredits extends Phaser.Scene {
         const creditsText = [
             "Angelo del piano: developer",
             "Domenico russo: developer",
+            "mariarosaria di bernardo: graphics designer",
             "Chiara maisto: graphics designer",
             "Paolo romano: graphics designer",
             "Simone alfè: sounds maker",
