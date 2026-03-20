@@ -1,6 +1,6 @@
 # Implementazione Multiplayer [GameScene](file:///c:/Users/Negrero/Desktop/Documenti%20domenico/Phaser/topdown-shooter/src/scenes/GameScene.ts#42-564) completata
 
-Abbiamo completato e risolto il sistema di movimento multiplayer per l'arena gigante in [GameScene.js](file:///c:/Users/Negrero/Desktop/Documenti%20domenico/Phaser/FUNZIONANTE/GameScene.js)! 
+
 
 ## Modifiche effettuate:
 
