@@ -437,6 +437,34 @@ export default class Preload extends Phaser.Scene {
             repeat: -1
         });
 
-        this.scene.start('Scene2');
+        this.showStartPrompt();
+    }
+
+    showStartPrompt() {
+        const W = 800, H = 600;
+
+        const overlay = this.add.rectangle(W / 2, H / 2, W, H, 0x000000, 0.6).setDepth(10);
+
+        const label = this.add.text(W / 2, H / 2, 'CLICK PER INIZIARE', {
+            fontFamily: 'monospace',
+            fontSize: '28px',
+            color: '#ffffff',
+            stroke: '#000000',
+            strokeThickness: 4
+        }).setOrigin(0.5).setDepth(11);
+
+        this.tweens.add({
+            targets: label,
+            alpha: 0,
+            duration: 700,
+            yoyo: true,
+            repeat: -1
+        });
+
+        this.input.once('pointerdown', () => {
+            overlay.destroy();
+            label.destroy();
+            this.scene.start('MenuScene');
+        });
     }
 }

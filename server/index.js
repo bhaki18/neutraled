@@ -6,7 +6,7 @@ const { Server } = pkg;
 import { monitor } from '@colyseus/monitor';
 import { GameRoom } from './rooms/GameRoom.js';
 
-const PORT = 2567;
+const PORT = process.env.PORT || 2567;
 const app = express();
 
 app.use(cors());
